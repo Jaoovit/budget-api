@@ -4,5 +4,5 @@ import jakarta.validation.constraints.Email;
 
 import java.util.UUID;
 
-public record CreateUserDTO(UUID id, Email email, String name, String password) {
+public record CreateUserDTO(UUID id, Email email, String name, String password, String confirmPassword) {
 }
