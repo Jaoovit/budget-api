@@ -10,6 +10,6 @@ import java.util.UUID;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
 
-    @Query("SELECT e FROM users WHERE e.email == :email")
-    public User findUser(@Param("email") Email email);
+    @Query("SELECT e FROM User e WHERE e.email = :email")
+    public User findUser(@Param("email") String email);
 }

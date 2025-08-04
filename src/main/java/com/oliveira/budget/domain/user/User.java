@@ -22,10 +22,7 @@ public class User {
     private UUID id;
 
     private String name;
-
-    @Email
-    private Email email;
-
+    private String email;
     private String password;
 
     public UUID getId() {
@@ -44,11 +41,11 @@ public class User {
         this.name = name;
     }
 
-    public Email getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(Email email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
