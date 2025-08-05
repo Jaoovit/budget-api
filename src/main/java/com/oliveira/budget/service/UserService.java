@@ -17,6 +17,7 @@ public class UserService {
 
         if (userRepository.findUser(data.email()) != null) {
             System.out.println("This email already exist");
+
         }
 
         if (!data.password().equals(data.confirmPassword())) {
@@ -30,6 +31,8 @@ public class UserService {
         user.setEmail(data.email());
         user.setName(data.name());
         user.setPassword(encodedPassword);
+
+        userRepository.save(user);
 
         return user;
     }
