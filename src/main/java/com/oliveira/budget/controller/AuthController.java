@@ -3,7 +3,6 @@ package com.oliveira.budget.controller;
 import com.oliveira.budget.domain.user.CreateUserDTO;
 import com.oliveira.budget.domain.user.User;
 import com.oliveira.budget.service.AuthService;
-import com.oliveira.budget.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody CreateUserDTO data) {
-        User user = this.authService.createUser(data);
+        User user = this.authService.register(data);
         return ResponseEntity.ok(user);
     }
 }
