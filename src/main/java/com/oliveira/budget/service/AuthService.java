@@ -1,13 +1,15 @@
 package com.oliveira.budget.service;
 
+import com.oliveira.budget.domain.user.AuthUserDTO;
 import com.oliveira.budget.domain.user.CreateUserDTO;
 import com.oliveira.budget.domain.user.User;
 import com.oliveira.budget.repositories.UserRepository;
+import com.oliveira.budget.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class AuthService {
@@ -15,17 +17,14 @@ public class AuthService {
     @Autowired
     private UserRepository userRepository;
 
-    public User register(CreateUserDTO data) {
+    public ResponseEntity<?> register(CreateUserDTO data) {
 
         if (userRepository.findUser(data.email()) != null) {
-            // return a friendly message
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists");
-
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
 
         if (!data.password().equals(data.confirmPassword())) {
-            // return a friendly message
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Passwords do not match");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password don't match");
         }
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -38,9 +37,26 @@ public class AuthService {
 
         userRepository.save(user);
 
-        // don't return password
         user.setPassword(null);
 
-        return user;
+        return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    }
+
+    public ResponseEntity<?> login(AuthUserDTO data) {
+        User user = userRepository.findUser(data.email());
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+        if (!passwordEncoder.matches(data.password(), user.getPassword())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
+        }
+
+        String token = JwtUtil.generateToken(user.getEmail());
+
+        return ResponseEntity.ok(new AuthResponse(token));
     }
 }
