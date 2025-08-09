@@ -1,5 +1,6 @@
 package com.oliveira.budget.service;
 
+import com.oliveira.budget.domain.auth.TokenDTO;
 import com.oliveira.budget.domain.user.AuthUserDTO;
 import com.oliveira.budget.domain.user.CreateUserDTO;
 import com.oliveira.budget.domain.user.User;
@@ -17,7 +18,7 @@ public class AuthService {
     @Autowired
     private UserRepository userRepository;
 
-    public ResponseEntity<?> register(CreateUserDTO data) {
+    public ResponseEntity register(CreateUserDTO data) {
 
         if (userRepository.findUser(data.email()) != null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
@@ -42,7 +43,7 @@ public class AuthService {
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
-    public ResponseEntity<?> login(AuthUserDTO data) {
+    public ResponseEntity login(AuthUserDTO data) {
         User user = userRepository.findUser(data.email());
 
         if (user == null) {
@@ -57,6 +58,8 @@ public class AuthService {
 
         String token = JwtUtil.generateToken(user.getEmail());
 
-        return ResponseEntity.ok(new AuthResponse(token));
+        TokenDTO auth = new TokenDTO(token);
+
+        return ResponseEntity.ok(auth);
     }
 }
