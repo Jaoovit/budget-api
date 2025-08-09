@@ -1,20 +1,21 @@
 package com.oliveira.budget.security;
-
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+@Component
 public class JwtUtil {
 
     @Value("${app.jwt.secret}")
-    private static String jwtSecret;
+    private String jwtSecret;
 
     @Value("${app.jwt.expiration}")
-    private static long jwtExpiration;
+    private long jwtExpiration;
 
-    public static String generateToken(String username) {
+    public String generateToken(String username) {
 
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpiration);

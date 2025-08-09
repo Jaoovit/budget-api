@@ -18,10 +18,13 @@ public class AuthService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     public ResponseEntity register(CreateUserDTO data) {
 
         if (userRepository.findUser(data.email()) != null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already registered");
         }
 
         if (!data.password().equals(data.confirmPassword())) {
@@ -56,7 +59,7 @@ public class AuthService {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
         }
 
-        String token = JwtUtil.generateToken(user.getEmail());
+        String token = jwtUtil.generateToken(user.getEmail());
 
         TokenDTO auth = new TokenDTO(token);
 
