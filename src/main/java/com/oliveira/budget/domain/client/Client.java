@@ -17,9 +17,10 @@ public class Client {
     private String email;
     private String phone;
 
-    @OneToOne(mappedBy = "clients", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private Address address;
 
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -55,12 +56,5 @@ public class Client {
         this.phone = phone;
     }
 
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
 
 }
