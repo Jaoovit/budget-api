@@ -1,5 +1,6 @@
 package com.oliveira.budget.domain.client;
 
+import com.oliveira.budget.domain.address.Address;
 import com.oliveira.budget.domain.user.User;
 import jakarta.persistence.*;
 
