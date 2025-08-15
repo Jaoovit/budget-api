@@ -58,7 +58,6 @@ public class JwtUtil {
             this.parseClaims(token);
             return true;
         } catch (Exception e) {
-            return false;
-        }
+            return false;        }
     }
 }
