@@ -48,21 +48,12 @@ public class AuthService {
 
     public ResponseEntity login(AuthUserDTO data) {
         User user = userRepository.findUser(data.email());
-
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
-        }
+        if (user == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-        if (!passwordEncoder.matches(data.password(), user.getPassword())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
-        }
+        if (!passwordEncoder.matches(data.password(), user.getPassword())) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
 
         String token = jwtUtil.generateToken(user.getEmail());
-
-        TokenDTO auth = new TokenDTO(token);
-
-        return ResponseEntity.ok(auth);
+        return ResponseEntity.ok(new TokenDTO(token));
     }
 }
