@@ -1,4 +1,6 @@
 package com.oliveira.budget.security;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -18,19 +20,31 @@ public class JwtUtil {
     private long jwtExpiration;
 
     private Key getSigningKey() {
-        return Keys.hmacShaKeyFor(jwtSecret.getBytes());
+        return Keys.hmacShaKeyFor(this.jwtSecret.getBytes());
     }
 
     public String generateToken(String email) {
 
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + jwtExpiration);
+        Date expiryDate = new Date(now.getTime() + this.jwtExpiration);
 
         return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .signWith(this.getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    public Claims parseClaims(String token) {
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(this.getSigningKey())
+                    .build()
+                    .parseClaimsJwt(token)
+                    .getBody();
+        } catch (JwtException e) {
+            throw new RuntimeException("Invalid or expired JWT token", e);
+        }
     }
 }
