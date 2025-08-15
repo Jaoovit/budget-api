@@ -49,7 +49,16 @@ public class JwtUtil {
     }
 
     public String getSubject(String token) {
-        Claims claims = parseClaims(token);
+        Claims claims = this.parseClaims(token);
         return claims.getSubject();
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            this.parseClaims(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
