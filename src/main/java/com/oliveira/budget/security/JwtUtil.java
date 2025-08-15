@@ -47,4 +47,9 @@ public class JwtUtil {
             throw new RuntimeException("Invalid or expired JWT token", e);
         }
     }
+
+    public String getSubject(String token) {
+        Claims claims = parseClaims(token);
+        return claims.getSubject();
+    }
 }
