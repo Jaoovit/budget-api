@@ -32,7 +32,7 @@ public class JwtUtil {
                 .setSubject(email)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
-                .signWith(this.getSigningKey(), SignatureAlgorithm.HS256)
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -41,7 +41,7 @@ public class JwtUtil {
             return Jwts.parserBuilder()
                     .setSigningKey(this.getSigningKey())
                     .build()
-                    .parseClaimsJwt(token)
+                    .parseClaimsJws(token)
                     .getBody();
         } catch (JwtException e) {
             throw new RuntimeException("Invalid or expired JWT token", e);
