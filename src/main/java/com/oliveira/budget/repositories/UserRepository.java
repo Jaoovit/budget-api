@@ -16,4 +16,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     @Query("SELECT e FROM User e")
     public Page<User> findAllUsers(Pageable pageable);
+
+    @Query("SELECT e FROM User e WHERE e.id = :id")
+    public User findUserById(@Param("id") UUID id);
 }

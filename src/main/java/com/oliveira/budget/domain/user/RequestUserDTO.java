@@ -1,4 +1,6 @@
 package com.oliveira.budget.domain.user;
 
-public record RequestUserDTO(String name, String email) {
+import java.util.UUID;
+
+public record RequestUserDTO(UUID id, String name, String email) {
 }

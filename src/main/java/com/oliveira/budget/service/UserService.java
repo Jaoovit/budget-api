@@ -3,9 +3,12 @@ package com.oliveira.budget.service;
 import com.oliveira.budget.domain.user.RequestUserDTO;
 import com.oliveira.budget.domain.user.User;
 import com.oliveira.budget.repositories.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -40,8 +44,21 @@ public class UserService implements UserDetailsService {
         Page<User> userPage = userRepository.findAllUsers(pageable);
 
         return userPage.map(user -> new RequestUserDTO(
+                user.getId(),
                 user.getName(),
                 user.getEmail()
         )).stream().toList();
+    }
+
+    public ResponseEntity<RequestUserDTO> getUserById(UUID id) {
+        try {
+            User user = userRepository.getReferenceById(id);
+
+            RequestUserDTO userDTO = new RequestUserDTO(user.getId(), user.getName(),user.getEmail());
+            return ResponseEntity.ok(userDTO);
+
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 }
