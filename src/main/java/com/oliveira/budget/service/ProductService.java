@@ -19,7 +19,7 @@ public class ProductService {
     @Autowired
     private UserRepository userRepository;
 
-    public ResponseEntity createProduct(CreateProductDTO data) {
+    public ResponseEntity<CreateProductDTO> createProduct(CreateProductDTO data) {
 
         Product product = new Product();
 
@@ -33,6 +33,12 @@ public class ProductService {
 
         productRepository.save(product);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(product);
+        CreateProductDTO createProductDTO = new CreateProductDTO(
+                product.getName(),
+                product.getDescription(),
+                product.getPrice(),
+                product.getUser().getId());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(createProductDTO);
     }
 }
