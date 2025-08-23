@@ -39,17 +39,6 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
-    public List<RequestUserDTO> getUsers(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<User> userPage = userRepository.findAllUsers(pageable);
-
-        return userPage.map(user -> new RequestUserDTO(
-                user.getId(),
-                user.getName(),
-                user.getEmail()
-        )).stream().toList();
-    }
-
     public ResponseEntity<RequestUserDTO> getUserById(UUID id) {
         try {
             User user = userRepository.getReferenceById(id);

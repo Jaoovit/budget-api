@@ -17,15 +17,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping
-    public ResponseEntity<List<RequestUserDTO>> getUsers(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
-    ) {
-        List<RequestUserDTO> users = userService.getUsers(page, size);
-        return ResponseEntity.ok(users);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<RequestUserDTO> getUserById(@PathVariable UUID id) {
         RequestUserDTO user = userService.getUserById(id).getBody();
