@@ -54,6 +54,6 @@ public class AuthService {
         if (!passwordEncoder.matches(data.password(), user.getPassword())) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
 
         String token = jwtUtil.generateToken(user.getEmail());
-        return ResponseEntity.ok(new TokenDTO(token));
+        return ResponseEntity.ok(new TokenDTO(token, user.getId()));
     }
 }

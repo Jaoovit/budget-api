@@ -1,4 +1,6 @@
 package com.oliveira.budget.domain.auth;
 
-public record TokenDTO(String token) {
+import java.util.UUID;
+
+public record TokenDTO(String token, UUID userId) {
 }
