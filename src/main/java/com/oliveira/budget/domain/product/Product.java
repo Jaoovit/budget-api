@@ -20,7 +20,7 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private UUID userId;
 
     public UUID getId() {
         return id;
@@ -52,5 +52,13 @@ public class Product {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 }
