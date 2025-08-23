@@ -1,6 +1,7 @@
 package com.oliveira.budget.domain.user;
 
 import com.oliveira.budget.domain.client.Client;
+import com.oliveira.budget.domain.product.Product;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -20,6 +21,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Client> clients = new ArrayList();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Product> products = new ArrayList();
 
     public UUID getId() {
         return id;

@@ -56,5 +56,4 @@ public class Client {
         this.phone = phone;
     }
 
-
 }
