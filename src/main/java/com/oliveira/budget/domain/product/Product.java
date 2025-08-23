@@ -20,7 +20,7 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private UUID userId;
+    private User user;
 
     public UUID getId() {
         return id;
@@ -54,11 +54,11 @@ public class Product {
         this.price = price;
     }
 
-    public UUID getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(UUID userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 }
