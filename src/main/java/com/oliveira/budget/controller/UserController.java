@@ -1,7 +1,9 @@
 package com.oliveira.budget.controller;
 import com.oliveira.budget.domain.user.RequestUserDTO;
 import com.oliveira.budget.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,8 +17,8 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<RequestUserDTO> getUserById(@PathVariable UUID id) {
-        RequestUserDTO user = userService.getUserById(id).getBody();
+    public ResponseEntity getUserById(@PathVariable UUID id) {
+        RequestUserDTO user = userService.getUserById(id);
         return ResponseEntity.ok(user);
     }
 

@@ -35,15 +35,10 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
-    public ResponseEntity<RequestUserDTO> getUserById(UUID id) {
-        try {
-            User user = userRepository.getReferenceById(id);
+    public RequestUserDTO getUserById(UUID id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-            RequestUserDTO userDTO = new RequestUserDTO(user.getId(), user.getName(),user.getEmail());
-            return ResponseEntity.ok(userDTO);
-
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        return new RequestUserDTO(user.getId(), user.getName(), user.getEmail());
     }
 }

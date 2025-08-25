@@ -51,7 +51,7 @@ public class AuthService {
         if (user == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        if (!passwordEncoder.matches(data.password(), user.getPassword())) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
+        if (!passwordEncoder.matches(data.password(), user.getPassword())) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid password");
 
         String token = jwtUtil.generateToken(user.getEmail());
         return ResponseEntity.ok(new TokenDTO(token, user.getId()));
