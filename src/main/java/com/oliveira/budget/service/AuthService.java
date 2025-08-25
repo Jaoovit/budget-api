@@ -19,16 +19,23 @@ public class AuthService {
     private UserRepository userRepository;
 
     @Autowired
+    private ErrorService errorService;
+
+    @Autowired
     private JwtUtil jwtUtil;
 
     public ResponseEntity register(CreateUserDTO data) {
 
         if (userRepository.findUser(data.email()) != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already registered");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(errorService
+                    .getError("400", "Email already registered"));
         }
 
         if (!data.password().equals(data.confirmPassword())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password don't match");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(errorService
+                    .getError("400", "Password don't match"));
         }
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -48,10 +55,18 @@ public class AuthService {
 
     public ResponseEntity login(AuthUserDTO data) {
         User user = userRepository.findUser(data.email());
-        if (user == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(errorService
+                    .getError("404", "User not found"));
+        }
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        if (!passwordEncoder.matches(data.password(), user.getPassword())) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid password");
+        if (!passwordEncoder.matches(data.password(), user.getPassword())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(errorService
+                    .getError("400", "Invalid password"));
+        }
 
         String token = jwtUtil.generateToken(user.getEmail());
         return ResponseEntity.ok(new TokenDTO(token, user.getId()));
