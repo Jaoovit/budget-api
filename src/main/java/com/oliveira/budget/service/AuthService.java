@@ -7,10 +7,11 @@ import com.oliveira.budget.domain.user.User;
 import com.oliveira.budget.repositories.UserRepository;
 import com.oliveira.budget.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.NoSuchElementException;
 
 @Service
 public class AuthService {
@@ -19,23 +20,16 @@ public class AuthService {
     private UserRepository userRepository;
 
     @Autowired
-    private ErrorService errorService;
-
-    @Autowired
     private JwtUtil jwtUtil;
 
-    public ResponseEntity register(CreateUserDTO data) {
+    public User register(CreateUserDTO data) {
 
         if (userRepository.findUser(data.email()) != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(errorService
-                    .getError("400", "Email already registered"));
+            throw new IllegalArgumentException("Email already registered");
         }
 
         if (!data.password().equals(data.confirmPassword())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(errorService
-                    .getError("400", "Password don't match"));
+            throw new IllegalArgumentException("Passwords don't match");
         }
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -50,25 +44,22 @@ public class AuthService {
 
         user.setPassword(null);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(user);
+        return user;
     }
 
-    public ResponseEntity login(AuthUserDTO data) {
+    public TokenDTO login(AuthUserDTO data) {
         User user = userRepository.findUser(data.email());
+
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(errorService
-                    .getError("404", "User not found"));
+            throw new UsernameNotFoundException("User not found");
         }
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         if (!passwordEncoder.matches(data.password(), user.getPassword())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(errorService
-                    .getError("400", "Invalid password"));
+            throw new IllegalArgumentException("Invalid password");
         }
 
         String token = jwtUtil.generateToken(user.getEmail());
-        return ResponseEntity.ok(new TokenDTO(token, user.getId()));
+        return new TokenDTO(token, user.getId());
     }
 }

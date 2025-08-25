@@ -3,10 +3,7 @@ package com.oliveira.budget.service;
 import com.oliveira.budget.domain.user.RequestUserDTO;
 import com.oliveira.budget.domain.user.User;
 import com.oliveira.budget.repositories.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -36,8 +33,11 @@ public class UserService implements UserDetailsService {
     }
 
     public RequestUserDTO getUserById(UUID id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        User user = userRepository.findUserById(id);
+
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
 
         return new RequestUserDTO(user.getId(), user.getName(), user.getEmail());
     }

@@ -1,7 +1,9 @@
 package com.oliveira.budget.controller;
 
+import com.oliveira.budget.domain.auth.TokenDTO;
 import com.oliveira.budget.domain.user.AuthUserDTO;
 import com.oliveira.budget.domain.user.CreateUserDTO;
+import com.oliveira.budget.domain.user.User;
 import com.oliveira.budget.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +18,13 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody CreateUserDTO data) {
-        return this.authService.register(data);
+        User user = authService.register(data);
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody AuthUserDTO data) {
-        return this.authService.login(data);
+        TokenDTO tokenDTO = authService.login(data);
+        return ResponseEntity.ok(tokenDTO);
     }
 }
