@@ -2,6 +2,7 @@ package com.oliveira.budget.service;
 
 import com.oliveira.budget.domain.product.CreateProductDTO;
 import com.oliveira.budget.domain.product.Product;
+import com.oliveira.budget.domain.product.RequestProductDTO;
 import com.oliveira.budget.domain.user.User;
 import com.oliveira.budget.repositories.ProductRepository;
 import com.oliveira.budget.repositories.UserRepository;
@@ -59,5 +60,18 @@ public class ProductService {
                 product.getUser().getId());
     }
 
+    public RequestProductDTO getProductById(UUID id) {
+        Product product = productRepository.findProductById(id);
 
+        if (product == null) {
+            throw new IllegalArgumentException("Product not found");
+        }
+
+        return new RequestProductDTO(
+                product.getId(),
+                product.getName(),
+                product.getDescription(),
+                product.getPrice()
+        );
+    }
 }
