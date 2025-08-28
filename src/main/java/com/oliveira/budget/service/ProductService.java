@@ -6,10 +6,10 @@ import com.oliveira.budget.domain.user.User;
 import com.oliveira.budget.repositories.ProductRepository;
 import com.oliveira.budget.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class ProductService {
@@ -58,4 +58,6 @@ public class ProductService {
                 product.getPrice(),
                 product.getUser().getId());
     }
+
+
 }
