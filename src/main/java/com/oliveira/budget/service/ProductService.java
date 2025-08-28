@@ -79,7 +79,7 @@ public class ProductService {
         );
     }
 
-    public List<RequestProductDTO> getProductsByUserID(UUID userId, int page, int size) {
+    public List<RequestProductDTO> getProductsByUserID(int page, int size, UUID userId) {
 
         Pageable pageable = PageRequest.of(page, size);
 
