@@ -2,6 +2,7 @@ package com.oliveira.budget.controller;
 
 import com.oliveira.budget.domain.product.CreateProductDTO;
 import com.oliveira.budget.domain.product.RequestProductDTO;
+import com.oliveira.budget.domain.product.UpdateProductDTO;
 import com.oliveira.budget.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,5 +38,11 @@ public class ProductController {
     ) {
         List<RequestProductDTO> products = productService.getProductsByUserID(page, size, userId);
         return ResponseEntity.ok(products);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<RequestProductDTO> updateProduct(@PathVariable UUID id, @RequestBody UpdateProductDTO data) {
+        RequestProductDTO product = productService.updateProduct(id, data);
+        return ResponseEntity.ok(product);
     }
 }
