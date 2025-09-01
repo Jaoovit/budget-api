@@ -3,6 +3,7 @@ package com.oliveira.budget.service;
 import com.oliveira.budget.domain.product.CreateProductDTO;
 import com.oliveira.budget.domain.product.Product;
 import com.oliveira.budget.domain.product.RequestProductDTO;
+import com.oliveira.budget.domain.product.UpdateProductDTO;
 import com.oliveira.budget.domain.user.User;
 import com.oliveira.budget.repositories.ProductRepository;
 import com.oliveira.budget.repositories.UserRepository;
@@ -91,5 +92,36 @@ public class ProductService {
                 product.getDescription(),
                 product.getPrice())
         ).stream().toList();
+    }
+
+    public RequestProductDTO updateProduct(UUID id, UpdateProductDTO data) {
+        Product product = productRepository.findProductById(id);
+
+        if (product == null) {
+            throw new IllegalArgumentException("Product not found");
+        }
+
+        product.setName(data.name());
+
+        if (data.name().length() > 100) {
+            throw new IllegalArgumentException("Name is too long. Maximum length is 100");
+        }
+
+        product.setDescription(data.description());
+
+        if (data.name().length() > 250) {
+            throw new IllegalArgumentException("Description is too long. Maximum length is 250");
+        }
+
+        product.setPrice(data.price());
+
+        productRepository.updateProduct(id, data.name(), data.description(), data.price());
+
+        return new RequestProductDTO(
+                product.getId(),
+                product.getName(),
+                product.getDescription(),
+                product.getPrice()
+        );
     }
 }
