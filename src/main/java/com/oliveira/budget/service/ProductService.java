@@ -124,4 +124,14 @@ public class ProductService {
                 product.getPrice()
         );
     }
+
+    public void deleteProduct(UUID id) {
+        Product product = productRepository.findProductById(id);
+
+        if (product == null) {
+            throw new IllegalArgumentException("Product not found");
+        }
+
+        productRepository.deleteById(product.getId());
+    }
 }
