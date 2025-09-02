@@ -94,6 +94,19 @@ public class ProductService {
         ).stream().toList();
     }
 
+    public List<RequestProductDTO> searchProducts(int page, int size, UUID userId, String search) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Product> productPage = productRepository.searchProducts(userId, search, pageable);
+
+        return productPage.map(product -> new RequestProductDTO(
+                product.getId(),
+                product.getName(),
+                product.getDescription(),
+                product.getPrice())
+        ).stream().toList();
+    }
+
     public RequestProductDTO updateProduct(UUID id, UpdateProductDTO data) {
         Product product = productRepository.findProductById(id);
 

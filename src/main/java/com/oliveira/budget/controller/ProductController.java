@@ -40,6 +40,15 @@ public class ProductController {
         return ResponseEntity.ok(products);
     }
 
+    @GetMapping("/search/user/{userId}")
+    public ResponseEntity<List<RequestProductDTO>> searchProducts(@PathVariable UUID userId,
+                                                                  @RequestParam(defaultValue = "0") int page,
+                                                                  @RequestParam(defaultValue = "10") int size,
+                                                                  @RequestParam String search) {
+        List<RequestProductDTO> products = productService.searchProducts(page, size, userId, search);
+        return ResponseEntity.ok(products);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<RequestProductDTO> updateProduct(@PathVariable UUID id, @RequestBody UpdateProductDTO data) {
         RequestProductDTO product = productService.updateProduct(id, data);

@@ -20,12 +20,18 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     @Query("SELECT e FROM Product e LEFT JOIN e.user a WHERE a.id = :userId")
     public Page<Product> findProductsByUserId(@Param("userId") UUID id, Pageable pageable);
 
+    @Query("SELECT e FROM Product e LEFT JOIN e.user a " +
+            "WHERE a.id = :userId AND e.name LIKE %:search%")
+    public Page<Product> searchProducts(@Param("userId") UUID id,
+                                        @Param("search") String search,
+                                        Pageable pageable);
+
     @Transactional
     @Modifying
     @Query("UPDATE Product e SET e.name = :name, e.description = :description," +
            "e.price = :price WHERE e.id = :id")
     public int updateProduct(@Param("id") UUID id,
-                                 @Param("name") String name,
-                                 @Param("description") String description,
-                                 @Param("price") BigDecimal price);
+                             @Param("name") String name,
+                             @Param("description") String description,
+                             @Param("price") BigDecimal price);
 }
