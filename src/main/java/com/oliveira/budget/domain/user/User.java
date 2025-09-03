@@ -3,6 +3,8 @@ package com.oliveira.budget.domain.user;
 import com.oliveira.budget.domain.client.Client;
 import com.oliveira.budget.domain.product.Product;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +18,11 @@ public class User {
     private UUID id;
 
     private String name;
+
+    @NotBlank
+    @Email(message = "Invalid email format")
     private String email;
+
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

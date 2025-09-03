@@ -21,6 +21,10 @@ public class ClientService {
     public CreateClientDTO createClient(CreateClientDTO data) {
         Client client = new Client();
 
+        if (data.name().length() > 100) {
+            throw new IllegalArgumentException("Name is too long. Maximum length is 100");
+        }
+
         client.setName(data.name());
         client.setEmail(data.email());
         client.setPhone(data.phone());
