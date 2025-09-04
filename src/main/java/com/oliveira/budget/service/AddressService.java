@@ -1,0 +1,38 @@
+package com.oliveira.budget.service;
+
+import com.oliveira.budget.domain.address.Address;
+import com.oliveira.budget.domain.address.CreateAddressDTO;
+import com.oliveira.budget.domain.client.Client;
+import com.oliveira.budget.repositories.AddressRepository;
+import com.oliveira.budget.repositories.ClientRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class AddressService {
+
+    @Autowired
+    private AddressRepository addressRepository;
+
+    @Autowired
+    private ClientRepository clientRepository;
+
+    public Address createAddress(CreateAddressDTO data) {
+        Address address = new Address();
+
+        address.setState(data.state());
+        address.setCity(data.city());
+        address.setStreet(data.street());
+        address.setNumber(data.number());
+
+        Client client = clientRepository.findById(data.client().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Client not found"));
+
+        address.setClient(client);
+
+        addressRepository.save(address);
+
+        return address;
+    }
+
+}

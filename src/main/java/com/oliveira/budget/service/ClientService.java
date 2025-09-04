@@ -1,6 +1,6 @@
 package com.oliveira.budget.service;
 
-import com.oliveira.budget.domain.address.Address;
+import com.oliveira.budget.domain.address.CreateAddressDTO;
 import com.oliveira.budget.domain.client.Client;
 import com.oliveira.budget.domain.client.CreateClientDTO;
 import com.oliveira.budget.domain.client.ResponseClientDTO;
@@ -19,6 +19,9 @@ public class ClientService {
 
     @Autowired
     private ClientRepository clientRepository;
+
+    @Autowired
+    private AddressService addressService;
 
     public ResponseClientDTO createClient(CreateClientDTO data) {
         Client client = new Client();
@@ -45,16 +48,9 @@ public class ClientService {
 
         clientRepository.save(client);
 
-        //Address address = new Address();
+        CreateAddressDTO createAddressDTO = new CreateAddressDTO(data.state(), data.city(), data.street(), data.number(), client);
 
-        //address.setState(data.state());
-        //address.setCity(data.city());
-        //address.setStreet(data.street());
-        //address.setNumber(data.number());
-        //address.setClient(client);
-        //addressRepository.save(address);
-
-
+        addressService.createAddress(createAddressDTO);
 
         return new ResponseClientDTO(
                 client.getName(),
