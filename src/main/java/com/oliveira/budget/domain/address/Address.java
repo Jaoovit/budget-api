@@ -60,4 +60,12 @@ public class Address {
     public void setNumber(String number) {
         this.number = number;
     }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
 }
