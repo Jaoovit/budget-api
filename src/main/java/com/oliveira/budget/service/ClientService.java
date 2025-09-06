@@ -2,6 +2,7 @@ package com.oliveira.budget.service;
 
 import com.oliveira.budget.domain.address.Address;
 import com.oliveira.budget.domain.address.CreateAddressDTO;
+import com.oliveira.budget.domain.address.RequestAddressDTO;
 import com.oliveira.budget.domain.client.Client;
 import com.oliveira.budget.domain.client.CreateClientDTO;
 import com.oliveira.budget.domain.client.RequestClientDTO;
@@ -70,7 +71,7 @@ public class ClientService {
             throw new IllegalArgumentException("Client not found");
         }
 
-        Address address = addressService.getAddressByClientId(clientId);
+        RequestAddressDTO address = addressService.getAddressByClientId(clientId);
 
         return new RequestClientDTO(
                 client.getId(),

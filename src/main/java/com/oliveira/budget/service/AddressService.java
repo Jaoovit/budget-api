@@ -2,6 +2,7 @@ package com.oliveira.budget.service;
 
 import com.oliveira.budget.domain.address.Address;
 import com.oliveira.budget.domain.address.CreateAddressDTO;
+import com.oliveira.budget.domain.address.RequestAddressDTO;
 import com.oliveira.budget.domain.client.Client;
 import com.oliveira.budget.repositories.AddressRepository;
 import com.oliveira.budget.repositories.ClientRepository;
@@ -37,14 +38,19 @@ public class AddressService {
         return address;
     }
 
-    public Address getAddressByClientId(UUID clientId) {
+    public RequestAddressDTO getAddressByClientId(UUID clientId) {
         Address address = addressRepository.findAddressByClientId(clientId);
 
         if (address == null) {
             throw new IllegalArgumentException("Address not found");
         }
 
-        return address;
+        return new RequestAddressDTO(
+                address.getState(),
+                address.getCity(),
+                address.getStreet(),
+                address.getNumber()
+        );
     }
 
 }

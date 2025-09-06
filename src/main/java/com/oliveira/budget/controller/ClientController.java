@@ -24,7 +24,7 @@ public class ClientController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<RequestClientDTO> getClientById(UUID id) {
+    public ResponseEntity<RequestClientDTO> getClientById(@PathVariable UUID id) {
         RequestClientDTO client = clientService.getClientById(id);
         return ResponseEntity.ok(client);
     }
