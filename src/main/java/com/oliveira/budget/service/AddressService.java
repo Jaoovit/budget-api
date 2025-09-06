@@ -8,6 +8,8 @@ import com.oliveira.budget.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class AddressService {
 
@@ -31,6 +33,16 @@ public class AddressService {
         address.setClient(client);
 
         addressRepository.save(address);
+
+        return address;
+    }
+
+    public Address getAddressByClientId(UUID clientId) {
+        Address address = addressRepository.findAddressByClientId(clientId);
+
+        if (address == null) {
+            throw new IllegalArgumentException("Address not found");
+        }
 
         return address;
     }

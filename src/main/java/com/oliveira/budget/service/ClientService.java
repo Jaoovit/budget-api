@@ -1,8 +1,10 @@
 package com.oliveira.budget.service;
 
+import com.oliveira.budget.domain.address.Address;
 import com.oliveira.budget.domain.address.CreateAddressDTO;
 import com.oliveira.budget.domain.client.Client;
 import com.oliveira.budget.domain.client.CreateClientDTO;
+import com.oliveira.budget.domain.client.RequestClientDTO;
 import com.oliveira.budget.domain.client.ResponseClientDTO;
 import com.oliveira.budget.domain.user.User;
 import com.oliveira.budget.repositories.ClientRepository;
@@ -10,6 +12,8 @@ import com.oliveira.budget.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class ClientService {
@@ -58,4 +62,22 @@ public class ClientService {
                 client.getPhone(),
                 client.getUser().getId());
     }
+
+    public RequestClientDTO getClientById(UUID clientId) {
+        Client client = clientRepository.getReferenceById(clientId);
+
+        if (client == null) {
+            throw new IllegalArgumentException("Client not found");
+        }
+
+        Address address = addressService.getAddressByClientId(clientId);
+
+        return new RequestClientDTO(
+                client.getId(),
+                client.getName(),
+                client.getEmail(),
+                client.getPhone(),
+                address
+        );
+     }
 }
