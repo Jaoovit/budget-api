@@ -54,7 +54,7 @@ public class AddressService {
     }
 
     public RequestAddressDTO updateAddress(UUID id, RequestAddressDTO data) {
-        Address address = addressRepository.getReferenceById(id);
+        Address address = addressRepository.findAddressByClientId(id);
 
         if (address == null) {
             throw new IllegalArgumentException("Address not found");

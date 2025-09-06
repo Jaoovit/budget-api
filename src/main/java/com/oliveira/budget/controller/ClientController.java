@@ -3,6 +3,7 @@ package com.oliveira.budget.controller;
 import com.oliveira.budget.domain.client.CreateClientDTO;
 import com.oliveira.budget.domain.client.RequestClientDTO;
 import com.oliveira.budget.domain.client.ResponseClientDTO;
+import com.oliveira.budget.domain.client.UpdateClientDTO;
 import com.oliveira.budget.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,5 +39,11 @@ public class ClientController {
     ) {
         List<RequestClientDTO> clients = clientService.getClientsByUserId(page, size, userId);
         return ResponseEntity.ok(clients);
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<RequestClientDTO> updateClientById(@PathVariable UUID id, @RequestBody UpdateClientDTO data) {
+        RequestClientDTO client = clientService.updateClient(id, data);
+        return ResponseEntity.ok(client);
     }
 }

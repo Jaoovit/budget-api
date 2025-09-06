@@ -3,10 +3,7 @@ package com.oliveira.budget.service;
 import com.oliveira.budget.domain.address.Address;
 import com.oliveira.budget.domain.address.CreateAddressDTO;
 import com.oliveira.budget.domain.address.RequestAddressDTO;
-import com.oliveira.budget.domain.client.Client;
-import com.oliveira.budget.domain.client.CreateClientDTO;
-import com.oliveira.budget.domain.client.RequestClientDTO;
-import com.oliveira.budget.domain.client.ResponseClientDTO;
+import com.oliveira.budget.domain.client.*;
 import com.oliveira.budget.domain.user.User;
 import com.oliveira.budget.repositories.ClientRepository;
 import com.oliveira.budget.repositories.UserRepository;
@@ -100,7 +97,7 @@ public class ClientService {
         ).stream().toList();
      }
 
-     public RequestClientDTO updateClient(UUID id, CreateClientDTO data) {
+     public RequestClientDTO updateClient(UUID id, UpdateClientDTO data) {
         Client client = clientRepository.getReferenceById(id);
 
          if (client == null) {
