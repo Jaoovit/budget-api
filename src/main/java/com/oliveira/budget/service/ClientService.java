@@ -99,4 +99,24 @@ public class ClientService {
                 addressService.getAddressByClientId(client.getId()))
         ).stream().toList();
      }
+
+     public RequestClientDTO updateClient(UUID id, CreateClientDTO data) {
+        Client client = clientRepository.getReferenceById(id);
+
+         if (client == null) {
+             throw new IllegalArgumentException("Client not found");
+         }
+
+         client.setName(data.name());
+         client.setEmail(data.email());
+         client.setPhone(data.phone());
+
+         clientRepository.updateClient(id, client.getName(), client.getEmail(), client.getPhone());
+
+         RequestAddressDTO address = new RequestAddressDTO(data.state(), data.city(), data.street(), data.number());
+
+         addressService.updateAddress(id, address);
+
+         return new RequestClientDTO(client.getId(), client.getName(), client.getEmail(), client.getPhone(), address);
+     }
 }
