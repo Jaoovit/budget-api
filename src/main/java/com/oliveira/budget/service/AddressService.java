@@ -53,4 +53,21 @@ public class AddressService {
         );
     }
 
+    public RequestAddressDTO updateAddress(UUID id, RequestAddressDTO data) {
+        Address address = addressRepository.getReferenceById(id);
+
+        if (address == null) {
+            throw new IllegalArgumentException("Address not found");
+        }
+
+        address.setState(data.state());
+        address.setCity(data.city());
+        address.setStreet(data.street());
+        address.setNumber(data.number());
+
+        addressRepository.updateAddress(id, data.state(), data.city(), data.street(), data.number());
+
+        return new RequestAddressDTO(address.getState(), address.getCity(), address.getStreet(), address.getNumber());
+    }
+
 }
