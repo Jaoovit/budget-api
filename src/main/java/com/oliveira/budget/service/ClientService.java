@@ -11,9 +11,13 @@ import com.oliveira.budget.domain.user.User;
 import com.oliveira.budget.repositories.ClientRepository;
 import com.oliveira.budget.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -80,5 +84,19 @@ public class ClientService {
                 client.getPhone(),
                 address
         );
+     }
+
+     public List<RequestClientDTO> getClientsByUserId(int page, int size,UUID userId) {
+         Pageable pageable = PageRequest.of(page, size);
+
+        Page<Client> clients = clientRepository.findClientsByUserId(userId, pageable);
+
+        return  clients.map(client -> new RequestClientDTO(
+                client.getId(),
+                client.getName(),
+                client.getEmail(),
+                client.getPhone(),
+                addressService.getAddressByClientId(client.getId()))
+        ).stream().toList();
      }
 }
