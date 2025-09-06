@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -27,5 +28,15 @@ public class ClientController {
     public ResponseEntity<RequestClientDTO> getClientById(@PathVariable UUID id) {
         RequestClientDTO client = clientService.getClientById(id);
         return ResponseEntity.ok(client);
+    }
+
+    @GetMapping("user/{userId}")
+    public ResponseEntity<List<RequestClientDTO>> getClientsByUserId(
+            @PathVariable UUID userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        List<RequestClientDTO> clients = clientService.getClientsByUserId(page, size, userId);
+        return ResponseEntity.ok(clients);
     }
 }
