@@ -124,6 +124,7 @@ public class ClientService {
             throw new IllegalArgumentException("Client not found");
         }
 
+        addressService.deleteAddress(client.getAddress().getId());
         clientRepository.deleteById(client.getId());
      }
 }
