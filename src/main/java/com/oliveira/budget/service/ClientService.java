@@ -116,4 +116,14 @@ public class ClientService {
 
          return new RequestClientDTO(client.getId(), client.getName(), client.getEmail(), client.getPhone(), address);
      }
+
+     public void deleteClient(UUID id) {
+        Client client = clientRepository.findClientById(id);
+
+        if (client == null) {
+            throw new IllegalArgumentException("Client not found");
+        }
+
+        clientRepository.deleteById(client.getId());
+     }
 }
