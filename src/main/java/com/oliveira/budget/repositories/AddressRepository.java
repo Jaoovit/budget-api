@@ -23,4 +23,7 @@ public interface AddressRepository extends JpaRepository<Address, UUID> {
                              @Param("city") String city,
                              @Param("street") String street,
                              @Param("number") String number);
+
+    @Query("SELECT e FROM Address e WHERE e.id = :id")
+    public Address findAddressById(@Param("id") UUID id);
 }
