@@ -70,4 +70,14 @@ public class AddressService {
         return new RequestAddressDTO(address.getState(), address.getCity(), address.getStreet(), address.getNumber());
     }
 
+    public void deleteAddress(UUID id) {
+        Address address = addressRepository.findAddressById(id);
+
+        if (address == null) {
+            throw new IllegalArgumentException("Address not found");
+        }
+
+        addressRepository.deleteById(address.getId());
+    }
+
 }
