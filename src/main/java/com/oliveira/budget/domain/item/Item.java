@@ -6,7 +6,8 @@ import jakarta.persistence.*;
 
 import java.util.UUID;
 
-@Table(name = "item")
+@Table(name = "items")
+@Entity
 public class Item {
 
     @Id
@@ -15,6 +16,7 @@ public class Item {
 
     private int quantity;
 
+    @OneToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
