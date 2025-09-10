@@ -4,6 +4,7 @@ import com.oliveira.budget.domain.client.Client;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.UUID;
 
 @Table(name = "budget")
@@ -15,8 +16,8 @@ public class Budget {
 
     private String name;
     private String description;
-    private Timestamp createdDate;
-    private Timestamp validDate;
+    private Date createdDate;
+    private Date validDate;
     private Boolean approved;
     private Float totalPrice;
 
@@ -48,19 +49,19 @@ public class Budget {
         this.description = description;
     }
 
-    public Timestamp getCreatedDate() {
+    public Date getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Timestamp createdDate) {
+    public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 
-    public Timestamp getValidDate() {
+    public Date getValidDate() {
         return validDate;
     }
 
-    public void setValidDate(Timestamp validDate) {
+    public void setValidDate(Date validDate) {
         this.validDate = validDate;
     }
 
