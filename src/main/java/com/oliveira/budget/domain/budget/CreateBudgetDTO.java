@@ -5,9 +5,6 @@ import java.util.UUID;
 
 public record CreateBudgetDTO(String name,
                               String description,
-                              Date createdDate,
                               int monthValid,
-                              Boolean approved,
-                              Float totalPrice,
                               UUID clientId) {
 }

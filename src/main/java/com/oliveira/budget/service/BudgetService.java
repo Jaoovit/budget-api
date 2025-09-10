@@ -2,6 +2,7 @@ package com.oliveira.budget.service;
 
 import com.oliveira.budget.domain.budget.Budget;
 import com.oliveira.budget.domain.budget.CreateBudgetDTO;
+import com.oliveira.budget.domain.budget.RequestBudgetDTO;
 import com.oliveira.budget.domain.client.Client;
 import com.oliveira.budget.repositories.BudgetRepository;
 import com.oliveira.budget.repositories.ClientRepository;
@@ -19,7 +20,7 @@ public class BudgetService {
     @Autowired
     private ClientRepository clientRepository;
 
-    public Budget createBudGet(CreateBudgetDTO data) {
+    public RequestBudgetDTO createBudget(CreateBudgetDTO data) {
         Budget budget = new Budget();
 
         if (data.name().length() > 100) {
@@ -55,6 +56,14 @@ public class BudgetService {
 
         budget.setClient(client);
 
-        return budget;
+        budgetRepository.save(budget);
+
+        return new RequestBudgetDTO(budget.getName(),
+                budget.getDescription(),
+                budget.getCreatedDate(),
+                budget.getValidDate(),
+                budget.getApproved(),
+                budget.getTotalPrice(),
+                budget.getClient().getId());
     }
 }

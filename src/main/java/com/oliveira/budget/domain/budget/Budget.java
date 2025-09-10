@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.UUID;
 
-@Table(name = "budget")
+@Table(name = "budgets")
 @Entity
 public class Budget {
     @Id
