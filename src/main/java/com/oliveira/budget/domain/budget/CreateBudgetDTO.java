@@ -1,7 +1,5 @@
 package com.oliveira.budget.domain.budget;
 
-import com.oliveira.budget.domain.client.Client;
-
 import java.sql.Date;
 import java.util.UUID;
 
