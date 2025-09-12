@@ -3,12 +3,17 @@ package com.oliveira.budget.service;
 import com.oliveira.budget.domain.budget.Budget;
 import com.oliveira.budget.domain.item.CreateItemDTO;
 import com.oliveira.budget.domain.item.Item;
+import com.oliveira.budget.domain.item.RequestItemDTO;
 import com.oliveira.budget.domain.product.Product;
 import com.oliveira.budget.repositories.BudgetRepository;
 import com.oliveira.budget.repositories.ItemRepository;
 import com.oliveira.budget.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ItemService {
@@ -44,5 +49,23 @@ public class ItemService {
         itemRepository.save(item);
 
         return new CreateItemDTO(item.getQuantity(), item.getProduct().getId(), item.getBudget().getId());
+    }
+
+    public List<RequestItemDTO> getItemsByBudgetId(UUID budgetId) {
+        Budget budget = budgetRepository.findBudgetById(budgetId);
+
+        if (budget == null) {
+            throw new IllegalArgumentException("Budget not found");
+        }
+
+        List<Item> items = itemRepository.findItemByBudgetId(budget.getId());
+
+        return items.stream()
+           .map(item -> new RequestItemDTO(
+                   item.getId(),
+                   item.getQuantity(),
+                   item.getProduct().getId(),
+                   item.getBudget().getId()))
+                .collect(Collectors.toList());
     }
 }

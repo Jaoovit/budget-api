@@ -12,5 +12,5 @@ import java.util.UUID;
 public interface ItemRepository extends JpaRepository<Item, UUID> {
 
     @Query("SELECT e FROM Item e LEFT JOIN e.budget a WHERE a.id = :budgetId")
-    public List<RequestItemDTO> findItemByBudgetId(@Param("budgetId") UUID budgetId);
+    public List<Item> findItemByBudgetId(@Param("budgetId") UUID budgetId);
 }
