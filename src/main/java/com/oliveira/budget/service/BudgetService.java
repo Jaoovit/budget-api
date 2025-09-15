@@ -46,7 +46,6 @@ public class BudgetService {
         budget.setValidDate(calendar.getTime());
 
         budget.setApproved(false);
-        budget.setTotalPrice(0F);
 
         Client client = clientRepository.findClientById(data.clientId());
 
@@ -63,7 +62,6 @@ public class BudgetService {
                 budget.getCreatedDate(),
                 budget.getValidDate(),
                 budget.getApproved(),
-                budget.getTotalPrice(),
                 budget.getClient().getId());
     }
 }

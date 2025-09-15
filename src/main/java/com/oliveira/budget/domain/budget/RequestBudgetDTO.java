@@ -8,6 +8,5 @@ public record RequestBudgetDTO(String name,
                                Date createdDate,
                                Date validDate,
                                Boolean approved,
-                               Float totalPrice,
                                UUID clientId) {
 }

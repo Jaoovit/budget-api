@@ -19,7 +19,6 @@ public class Budget {
     private Date createdDate;
     private Date validDate;
     private Boolean approved;
-    private Float totalPrice;
 
     @ManyToOne
     @JoinColumn(name = "client_id")
@@ -71,14 +70,6 @@ public class Budget {
 
     public void setApproved(Boolean approved) {
         this.approved = approved;
-    }
-
-    public Float getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(Float totalPrice) {
-        this.totalPrice = totalPrice;
     }
 
     public Client getClient() {
