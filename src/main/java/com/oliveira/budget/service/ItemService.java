@@ -68,4 +68,14 @@ public class ItemService {
                    item.getBudget().getId()))
                 .collect(Collectors.toList());
     }
+
+    public void deleteItem(UUID id) {
+        Item item = itemRepository.getReferenceById(id);
+
+        if (item == null) {
+            throw new IllegalArgumentException("Item not found");
+        }
+
+        itemRepository.deleteById(item.getId());
+    }
 }
