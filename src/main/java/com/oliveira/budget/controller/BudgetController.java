@@ -1,14 +1,14 @@
 package com.oliveira.budget.controller;
 
 import com.oliveira.budget.domain.budget.CreateBudgetDTO;
+import com.oliveira.budget.domain.budget.GetBudgetDTO;
 import com.oliveira.budget.domain.budget.RequestBudgetDTO;
 import com.oliveira.budget.service.BudgetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/budgets")
@@ -20,6 +20,12 @@ public class BudgetController {
     @PostMapping
     public ResponseEntity<RequestBudgetDTO> createBudget(@RequestBody CreateBudgetDTO data) {
         RequestBudgetDTO budget = budgetService.createBudget(data);
+        return ResponseEntity.ok(budget);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<GetBudgetDTO> getBudgetById(@PathVariable UUID id) {
+        GetBudgetDTO budget = budgetService.getBudgetById(id);
         return ResponseEntity.ok(budget);
     }
 }

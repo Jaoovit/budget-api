@@ -33,5 +33,5 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     public int updateProduct(@Param("id") UUID id,
                              @Param("name") String name,
                              @Param("description") String description,
-                             @Param("price") BigDecimal price);
+                             @Param("price") Float price);
 }

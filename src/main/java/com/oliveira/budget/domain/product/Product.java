@@ -16,7 +16,7 @@ public class Product {
 
     private String name;
     private String description;
-    private BigDecimal price;
+    private Float price;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -46,11 +46,11 @@ public class Product {
         this.description = description;
     }
 
-    public BigDecimal getPrice() {
+    public Float getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(Float price) {
         this.price = price;
     }
 
