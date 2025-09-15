@@ -1,6 +1,7 @@
 package com.oliveira.budget.service;
 
 import com.oliveira.budget.domain.budget.Budget;
+import com.oliveira.budget.domain.item.ChangeQuantityDTO;
 import com.oliveira.budget.domain.item.CreateItemDTO;
 import com.oliveira.budget.domain.item.Item;
 import com.oliveira.budget.domain.item.RequestItemDTO;
@@ -67,6 +68,25 @@ public class ItemService {
                    item.getProduct().getId(),
                    item.getBudget().getId()))
                 .collect(Collectors.toList());
+    }
+
+    public RequestItemDTO updateItemQuantity(UUID id, ChangeQuantityDTO data) {
+        Item item = itemRepository.getReferenceById(id);
+
+        if (item == null) {
+            throw new IllegalArgumentException("Item not found");
+        }
+
+        item.setQuantity(data.quantity());
+
+        itemRepository.updateItemQuantity(id, data.quantity());
+
+        return new RequestItemDTO(
+                item.getId(),
+                item.getQuantity(),
+                item.getProduct().getId(),
+                item.getBudget().getId()
+        );
     }
 
     public void deleteItem(UUID id) {
