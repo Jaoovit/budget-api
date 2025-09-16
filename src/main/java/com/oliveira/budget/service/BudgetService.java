@@ -6,11 +6,12 @@ import com.oliveira.budget.domain.budget.GetBudgetDTO;
 import com.oliveira.budget.domain.budget.RequestBudgetDTO;
 import com.oliveira.budget.domain.client.Client;
 import com.oliveira.budget.domain.item.RequestItemDTO;
-import com.oliveira.budget.domain.product.Product;
 import com.oliveira.budget.domain.product.RequestProductDTO;
 import com.oliveira.budget.repositories.BudgetRepository;
 import com.oliveira.budget.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -102,5 +103,18 @@ public class BudgetService {
                 totalPrice,
                 budget.getApproved()
                 );
+    }
+
+    public GetBudgetDTO approvedBudget(UUID id) {
+        Budget budget = budgetRepository.findBudgetById(id);
+
+        if (budget == null) {
+            throw new IllegalArgumentException("Budget not found");
+        }
+
+        budget.setApproved(true);
+        budgetRepository.save(budget);
+
+        return getBudgetById(budget.getId());
     }
 }

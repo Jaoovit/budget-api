@@ -28,4 +28,10 @@ public class BudgetController {
         GetBudgetDTO budget = budgetService.getBudgetById(id);
         return ResponseEntity.ok(budget);
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<GetBudgetDTO> approveBudget(@PathVariable UUID id) {
+        GetBudgetDTO budget = budgetService.approvedBudget(id);
+        return  ResponseEntity.ok(budget);
+    }
 }
