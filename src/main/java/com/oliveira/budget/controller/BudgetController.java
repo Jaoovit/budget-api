@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -28,6 +29,12 @@ public class BudgetController {
     public ResponseEntity<GetBudgetDTO> getBudgetById(@PathVariable UUID id) {
         GetBudgetDTO budget = budgetService.getBudgetById(id);
         return ResponseEntity.ok(budget);
+    }
+
+    @GetMapping("/clients/{clientId}")
+    public ResponseEntity<List<GetBudgetDTO>> getBudgetsByClientId(@PathVariable UUID clientId) {
+        List<GetBudgetDTO> budgets = budgetService.getBudgetByClientId(clientId);
+        return ResponseEntity.ok(budgets);
     }
 
     @PutMapping("/{id}")

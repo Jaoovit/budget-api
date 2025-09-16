@@ -102,6 +102,20 @@ public class BudgetService {
                 );
     }
 
+    public List<GetBudgetDTO> getBudgetByClientId(UUID clientId) {
+        Client client = clientRepository.findClientById(clientId);
+
+        if (client == null) {
+            throw new IllegalArgumentException("Client not found");
+        }
+
+        List<Budget> budgets = budgetRepository.findBudgetByClientId(client.getId());
+
+        return budgets.stream()
+                .map(budget -> getBudgetById(budget.getId()))
+                .toList();
+    }
+
     public RequestBudgetDTO updateBudget(UpdateBudgetDTO data, UUID id) {
         Budget budget = budgetRepository.findBudgetById(id);
 
