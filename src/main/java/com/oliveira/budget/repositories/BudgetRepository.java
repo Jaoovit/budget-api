@@ -18,4 +18,9 @@ public interface BudgetRepository extends JpaRepository<Budget, UUID> {
     @Modifying
     @Query("UPDATE Budget e SET e.approved = :approved WHERE e.id = :id")
     public int approveBudget(@Param("id") UUID id, @Param("approved") Boolean approved);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Budget e SET e.name = :name, e.description = :description WHERE e.id = :id")
+    public int updateBudget(@Param("id") UUID id, @Param("name") String name, @Param("description") String description);
 }

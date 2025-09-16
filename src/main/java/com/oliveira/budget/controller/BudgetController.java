@@ -3,6 +3,7 @@ package com.oliveira.budget.controller;
 import com.oliveira.budget.domain.budget.CreateBudgetDTO;
 import com.oliveira.budget.domain.budget.GetBudgetDTO;
 import com.oliveira.budget.domain.budget.RequestBudgetDTO;
+import com.oliveira.budget.domain.budget.UpdateBudgetDTO;
 import com.oliveira.budget.service.BudgetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +30,15 @@ public class BudgetController {
         return ResponseEntity.ok(budget);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<RequestBudgetDTO> updateBudget(@PathVariable UUID id, @RequestBody UpdateBudgetDTO data) {
+        RequestBudgetDTO budget = budgetService.updateBudget(data, id);
+        return ResponseEntity.ok(budget);
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<GetBudgetDTO> approveBudget(@PathVariable UUID id) {
         GetBudgetDTO budget = budgetService.approvedBudget(id);
-        return  ResponseEntity.ok(budget);
+        return ResponseEntity.ok(budget);
     }
 }

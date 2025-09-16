@@ -1,9 +1,6 @@
 package com.oliveira.budget.service;
 
-import com.oliveira.budget.domain.budget.Budget;
-import com.oliveira.budget.domain.budget.CreateBudgetDTO;
-import com.oliveira.budget.domain.budget.GetBudgetDTO;
-import com.oliveira.budget.domain.budget.RequestBudgetDTO;
+import com.oliveira.budget.domain.budget.*;
 import com.oliveira.budget.domain.client.Client;
 import com.oliveira.budget.domain.item.RequestItemDTO;
 import com.oliveira.budget.domain.product.RequestProductDTO;
@@ -103,6 +100,35 @@ public class BudgetService {
                 totalPrice,
                 budget.getApproved()
                 );
+    }
+
+    public RequestBudgetDTO updateBudget(UpdateBudgetDTO data, UUID id) {
+        Budget budget = budgetRepository.findBudgetById(id);
+
+        if (budget == null) {
+            throw new IllegalArgumentException("Budget not found");
+        }
+
+        if (data.name().length() > 100) {
+            throw new IllegalArgumentException("Name is too long. Maximum length is 100");
+        }
+
+        budget.setName(data.name());
+
+        if (data.name().length() > 250) {
+            throw new IllegalArgumentException("Description is too long. Maximum length is 250");
+        }
+
+        budget.setDescription(data.description());
+
+        budgetRepository.updateBudget(id, data.name(), data.description());
+
+        return new RequestBudgetDTO(budget.getName(),
+                budget.getDescription(),
+                budget.getCreatedDate(),
+                budget.getValidDate(),
+                budget.getApproved(),
+                budget.getClient().getId());
     }
 
     public GetBudgetDTO approvedBudget(UUID id) {
