@@ -41,4 +41,10 @@ public class BudgetController {
         GetBudgetDTO budget = budgetService.approvedBudget(id);
         return ResponseEntity.ok(budget);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteBudget(@PathVariable UUID id) {
+        budgetService.deleteBudget(id);
+        return ResponseEntity.ok().build();
+    }
 }

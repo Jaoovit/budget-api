@@ -143,4 +143,14 @@ public class BudgetService {
 
         return getBudgetById(budget.getId());
     }
+
+    public void deleteBudget(UUID id) {
+        Budget budget = budgetRepository.findBudgetById(id);
+
+        if (budget == null) {
+            throw new IllegalArgumentException("Budget not found");
+        }
+
+        budgetRepository.deleteById(budget.getId());
+    }
 }
