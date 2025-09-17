@@ -2,6 +2,7 @@ package com.oliveira.budget.service;
 
 import com.oliveira.budget.domain.user.RequestUserDTO;
 import com.oliveira.budget.domain.user.User;
+import com.oliveira.budget.exception.ResourceNotFoundException;
 import com.oliveira.budget.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,7 +23,7 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = this.userRepository.findUser(email);
         if (user == null) {
-            throw new UsernameNotFoundException("User not found");
+            throw new ResourceNotFoundException("User not found");
         }
 
         return org.springframework.security.core.userdetails.User
@@ -36,7 +37,7 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findUserById(id);
 
         if (user == null) {
-            throw new UsernameNotFoundException("User not found");
+            throw new ResourceNotFoundException("User not found");
         }
 
         return new RequestUserDTO(user.getId(), user.getName(), user.getEmail());
