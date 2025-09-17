@@ -5,6 +5,8 @@ import com.oliveira.budget.domain.address.CreateAddressDTO;
 import com.oliveira.budget.domain.address.RequestAddressDTO;
 import com.oliveira.budget.domain.client.*;
 import com.oliveira.budget.domain.user.User;
+import com.oliveira.budget.exception.InvalidLengthException;
+import com.oliveira.budget.exception.ResourceNotFoundException;
 import com.oliveira.budget.repositories.ClientRepository;
 import com.oliveira.budget.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +35,7 @@ public class ClientService {
         Client client = new Client();
 
         if (data.name().length() > 100) {
-            throw new IllegalArgumentException("Name is too long. Maximum length is 100");
+            throw new InvalidLengthException("Name is too long. Maximum length is 100");
         }
 
         client.setName(data.name());
@@ -41,13 +43,13 @@ public class ClientService {
         client.setPhone(data.phone());
 
         if (data.userId() == null) {
-            throw new IllegalArgumentException("User is required");
+            throw new InvalidLengthException("User is required");
         }
 
         User user = userRepository.findUserById(data.userId());
 
         if (user == null) {
-            throw new UsernameNotFoundException("User not found");
+            throw new ResourceNotFoundException("User not found");
         }
 
         client.setUser(user);
@@ -69,7 +71,7 @@ public class ClientService {
         Client client = clientRepository.getReferenceById(clientId);
 
         if (client == null) {
-            throw new IllegalArgumentException("Client not found");
+            throw new ResourceNotFoundException("Client not found");
         }
 
         RequestAddressDTO address = addressService.getAddressByClientId(clientId);
@@ -101,7 +103,7 @@ public class ClientService {
         Client client = clientRepository.getReferenceById(id);
 
          if (client == null) {
-             throw new IllegalArgumentException("Client not found");
+             throw new ResourceNotFoundException("Client not found");
          }
 
          client.setName(data.name());
@@ -121,7 +123,7 @@ public class ClientService {
         Client client = clientRepository.findClientById(id);
 
         if (client == null) {
-            throw new IllegalArgumentException("Client not found");
+            throw new ResourceNotFoundException("Client not found");
         }
 
         addressService.deleteAddress(client.getAddress().getId());
