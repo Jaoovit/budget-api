@@ -123,7 +123,7 @@ public class ClientService {
         Client client = clientRepository.findClientById(id);
 
         if (client == null) {
-            throw new ResourceNotFoundException("Client not found");
+            throw new InvalidLengthException("Client not found");
         }
 
         addressService.deleteAddress(client.getAddress().getId());

@@ -4,6 +4,9 @@ import com.oliveira.budget.domain.auth.TokenDTO;
 import com.oliveira.budget.domain.user.AuthUserDTO;
 import com.oliveira.budget.domain.user.CreateUserDTO;
 import com.oliveira.budget.domain.user.User;
+import com.oliveira.budget.exception.InvalidInputException;
+import com.oliveira.budget.exception.ResourceNotFoundException;
+import com.oliveira.budget.exception.WrongPasswordException;
 import com.oliveira.budget.repositories.UserRepository;
 import com.oliveira.budget.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +28,11 @@ public class AuthService {
     public User register(CreateUserDTO data) {
 
         if (userRepository.findUser(data.email()) != null) {
-            throw new IllegalArgumentException("Email already registered");
+            throw new InvalidInputException("Email already registered");
         }
 
         if (!data.password().equals(data.confirmPassword())) {
-            throw new IllegalArgumentException("Passwords don't match");
+            throw new InvalidInputException("Passwords don't match");
         }
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -51,12 +54,12 @@ public class AuthService {
         User user = userRepository.findUser(data.email());
 
         if (user == null) {
-            throw new UsernameNotFoundException("User not found");
+            throw new ResourceNotFoundException("User not found");
         }
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         if (!passwordEncoder.matches(data.password(), user.getPassword())) {
-            throw new IllegalArgumentException("Invalid password");
+            throw new WrongPasswordException("Invalid password");
         }
 
         String token = jwtUtil.generateToken(user.getEmail());
