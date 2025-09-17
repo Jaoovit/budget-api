@@ -6,6 +6,7 @@ import com.oliveira.budget.domain.item.CreateItemDTO;
 import com.oliveira.budget.domain.item.Item;
 import com.oliveira.budget.domain.item.RequestItemDTO;
 import com.oliveira.budget.domain.product.Product;
+import com.oliveira.budget.exception.ResourceNotFoundException;
 import com.oliveira.budget.repositories.BudgetRepository;
 import com.oliveira.budget.repositories.ItemRepository;
 import com.oliveira.budget.repositories.ProductRepository;
@@ -34,13 +35,13 @@ public class ItemService {
         Product product = productRepository.findProductById(data.productId());
 
         if (product == null) {
-            throw new IllegalArgumentException("Product not found");
+            throw new ResourceNotFoundException("Product not found");
         }
 
         Budget budget = budgetRepository.findBudgetById(data.budgetId());
 
         if (budget == null) {
-            throw new IllegalArgumentException("Budget not found");
+            throw new ResourceNotFoundException("Budget not found");
         }
 
         item.setQuantity(data.quantity());
@@ -56,7 +57,7 @@ public class ItemService {
         Budget budget = budgetRepository.findBudgetById(budgetId);
 
         if (budget == null) {
-            throw new IllegalArgumentException("Budget not found");
+            throw new ResourceNotFoundException("Budget not found");
         }
 
         List<Item> items = itemRepository.findItemByBudgetId(budget.getId());
@@ -74,7 +75,7 @@ public class ItemService {
         Item item = itemRepository.getReferenceById(id);
 
         if (item == null) {
-            throw new IllegalArgumentException("Item not found");
+            throw new ResourceNotFoundException("Item not found");
         }
 
         item.setQuantity(data.quantity());
@@ -93,7 +94,7 @@ public class ItemService {
         Item item = itemRepository.getReferenceById(id);
 
         if (item == null) {
-            throw new IllegalArgumentException("Item not found");
+            throw new ResourceNotFoundException("Item not found");
         }
 
         itemRepository.deleteById(item.getId());
