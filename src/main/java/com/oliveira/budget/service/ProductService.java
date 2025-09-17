@@ -5,6 +5,8 @@ import com.oliveira.budget.domain.product.Product;
 import com.oliveira.budget.domain.product.RequestProductDTO;
 import com.oliveira.budget.domain.product.UpdateProductDTO;
 import com.oliveira.budget.domain.user.User;
+import com.oliveira.budget.exception.InvalidLengthException;
+import com.oliveira.budget.exception.ResourceNotFoundException;
 import com.oliveira.budget.repositories.ProductRepository;
 import com.oliveira.budget.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,26 +33,26 @@ public class ProductService {
         Product product = new Product();
 
         if (data.name().length() > 100) {
-            throw new IllegalArgumentException("Name is too long. Maximum length is 100");
+            throw new InvalidLengthException("Name is too long. Maximum length is 100");
         }
 
         product.setName(data.name());
 
         if (data.name().length() > 250) {
-            throw new IllegalArgumentException("Description is too long. Maximum length is 250");
+            throw new InvalidLengthException("Description is too long. Maximum length is 250");
         }
 
         product.setDescription(data.description());
         product.setPrice(data.price());
 
         if (data.userId() == null) {
-            throw new IllegalArgumentException("User is required");
+            throw new InvalidLengthException("User is required");
         }
 
         User user = userRepository.findUserById(data.userId());
 
         if (user == null) {
-            throw new UsernameNotFoundException("User not found");
+            throw new ResourceNotFoundException("User not found");
         }
 
         product.setUser(user);
@@ -69,7 +71,7 @@ public class ProductService {
         Product product = productRepository.findProductById(id);
 
         if (product == null) {
-            throw new IllegalArgumentException("Product not found");
+            throw new ResourceNotFoundException("Product not found");
         }
 
         return new RequestProductDTO(
@@ -111,19 +113,19 @@ public class ProductService {
         Product product = productRepository.findProductById(id);
 
         if (product == null) {
-            throw new IllegalArgumentException("Product not found");
+            throw new ResourceNotFoundException("Product not found");
         }
 
         product.setName(data.name());
 
         if (data.name().length() > 100) {
-            throw new IllegalArgumentException("Name is too long. Maximum length is 100");
+            throw new InvalidLengthException("Name is too long. Maximum length is 100");
         }
 
         product.setDescription(data.description());
 
         if (data.name().length() > 250) {
-            throw new IllegalArgumentException("Description is too long. Maximum length is 250");
+            throw new InvalidLengthException("Description is too long. Maximum length is 250");
         }
 
         product.setPrice(data.price());
@@ -142,7 +144,7 @@ public class ProductService {
         Product product = productRepository.findProductById(id);
 
         if (product == null) {
-            throw new IllegalArgumentException("Product not found");
+            throw new ResourceNotFoundException("Product not found");
         }
 
         productRepository.deleteById(product.getId());
