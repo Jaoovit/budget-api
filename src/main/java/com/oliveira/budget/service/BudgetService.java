@@ -99,7 +99,7 @@ public class BudgetService {
                 budget.getValidDate(),
                 totalPrice,
                 budget.getApproved()
-                );
+        );
     }
 
     public List<GetBudgetDTO> getBudgetByClientId(UUID clientId) {

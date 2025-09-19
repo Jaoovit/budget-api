@@ -1,4 +1,5 @@
 package com.oliveira.budget.security;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -58,6 +59,7 @@ public class JwtUtil {
             this.parseClaims(token);
             return true;
         } catch (Exception e) {
-            return false;        }
+            return false;
+        }
     }
 }

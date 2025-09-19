@@ -81,43 +81,43 @@ public class ClientService {
                 client.getPhone(),
                 address
         );
-     }
+    }
 
-     public List<RequestClientDTO> getClientsByUserId(int page, int size,UUID userId) {
-         Pageable pageable = PageRequest.of(page, size);
+    public List<RequestClientDTO> getClientsByUserId(int page, int size, UUID userId) {
+        Pageable pageable = PageRequest.of(page, size);
 
         Page<Client> clients = clientRepository.findClientsByUserId(userId, pageable);
 
-        return  clients.map(client -> new RequestClientDTO(
+        return clients.map(client -> new RequestClientDTO(
                 client.getId(),
                 client.getName(),
                 client.getEmail(),
                 client.getPhone(),
                 addressService.getAddressByClientId(client.getId()))
         ).stream().toList();
-     }
+    }
 
-     public RequestClientDTO updateClient(UUID id, UpdateClientDTO data) {
+    public RequestClientDTO updateClient(UUID id, UpdateClientDTO data) {
         Client client = clientRepository.getReferenceById(id);
 
-         if (client == null) {
-             throw new ResourceNotFoundException("Client not found");
-         }
+        if (client == null) {
+            throw new ResourceNotFoundException("Client not found");
+        }
 
-         client.setName(data.name());
-         client.setEmail(data.email());
-         client.setPhone(data.phone());
+        client.setName(data.name());
+        client.setEmail(data.email());
+        client.setPhone(data.phone());
 
-         clientRepository.updateClient(id, client.getName(), client.getEmail(), client.getPhone());
+        clientRepository.updateClient(id, client.getName(), client.getEmail(), client.getPhone());
 
-         RequestAddressDTO address = new RequestAddressDTO(data.state(), data.city(), data.street(), data.number());
+        RequestAddressDTO address = new RequestAddressDTO(data.state(), data.city(), data.street(), data.number());
 
-         addressService.updateAddress(id, address);
+        addressService.updateAddress(id, address);
 
-         return new RequestClientDTO(client.getId(), client.getName(), client.getEmail(), client.getPhone(), address);
-     }
+        return new RequestClientDTO(client.getId(), client.getName(), client.getEmail(), client.getPhone(), address);
+    }
 
-     public void deleteClient(UUID id) {
+    public void deleteClient(UUID id) {
         Client client = clientRepository.findClientById(id);
 
         if (client == null) {
@@ -126,5 +126,5 @@ public class ClientService {
 
         addressService.deleteAddress(client.getAddress().getId());
         clientRepository.deleteById(client.getId());
-     }
+    }
 }

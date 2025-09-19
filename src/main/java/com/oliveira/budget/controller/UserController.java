@@ -1,4 +1,5 @@
 package com.oliveira.budget.controller;
+
 import com.oliveira.budget.domain.user.RequestUserDTO;
 import com.oliveira.budget.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

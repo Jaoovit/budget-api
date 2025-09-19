@@ -1,4 +1,5 @@
 package com.oliveira.budget.security;
+
 import com.oliveira.budget.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -31,10 +32,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String header = request.getHeader("Authorization");
 
-        if(header != null && header.startsWith("Bearer ")) {
+        if (header != null && header.startsWith("Bearer ")) {
             String token = header.substring(7);
 
-            if(jwtUtil.validateToken(token)) {
+            if (jwtUtil.validateToken(token)) {
                 String email = jwtUtil.getSubject(token);
                 UserDetails userDetails = userService.loadUserByUsername(email);
 

@@ -32,9 +32,9 @@ public class ProductController {
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<RequestProductDTO>> getProductsByUserId(
-                        @PathVariable UUID userId,
-                        @RequestParam(defaultValue = "0") int page,
-                        @RequestParam(defaultValue = "10") int size
+            @PathVariable UUID userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
     ) {
         List<RequestProductDTO> products = productService.getProductsByUserID(page, size, userId);
         return ResponseEntity.ok(products);

@@ -63,11 +63,11 @@ public class ItemService {
         List<Item> items = itemRepository.findItemByBudgetId(budget.getId());
 
         return items.stream()
-           .map(item -> new RequestItemDTO(
-                   item.getId(),
-                   item.getQuantity(),
-                   item.getProduct().getId(),
-                   item.getBudget().getId()))
+                .map(item -> new RequestItemDTO(
+                        item.getId(),
+                        item.getQuantity(),
+                        item.getProduct().getId(),
+                        item.getBudget().getId()))
                 .collect(Collectors.toList());
     }
 

@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 public interface ProductRepository extends JpaRepository<Product, UUID> {
@@ -29,7 +28,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     @Transactional
     @Modifying
     @Query("UPDATE Product e SET e.name = :name, e.description = :description," +
-           "e.price = :price WHERE e.id = :id")
+            "e.price = :price WHERE e.id = :id")
     public int updateProduct(@Param("id") UUID id,
                              @Param("name") String name,
                              @Param("description") String description,
