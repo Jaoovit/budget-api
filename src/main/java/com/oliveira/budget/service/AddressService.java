@@ -4,6 +4,7 @@ import com.oliveira.budget.domain.address.Address;
 import com.oliveira.budget.domain.address.CreateAddressDTO;
 import com.oliveira.budget.domain.address.RequestAddressDTO;
 import com.oliveira.budget.domain.client.Client;
+import com.oliveira.budget.exception.ResourceNotFoundException;
 import com.oliveira.budget.repositories.AddressRepository;
 import com.oliveira.budget.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class AddressService {
         address.setNumber(data.number());
 
         Client client = clientRepository.findById(data.client().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Client not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Client not found"));
 
         address.setClient(client);
 
@@ -42,7 +43,7 @@ public class AddressService {
         Address address = addressRepository.findAddressByClientId(clientId);
 
         if (address == null) {
-            throw new IllegalArgumentException("Address not found");
+            throw new ResourceNotFoundException("Address not found");
         }
 
         return new RequestAddressDTO(
@@ -57,7 +58,7 @@ public class AddressService {
         Address address = addressRepository.findAddressByClientId(id);
 
         if (address == null) {
-            throw new IllegalArgumentException("Address not found");
+            throw new ResourceNotFoundException("Address not found");
         }
 
         address.setState(data.state());
@@ -74,7 +75,7 @@ public class AddressService {
         Address address = addressRepository.findAddressById(id);
 
         if (address == null) {
-            throw new IllegalArgumentException("Address not found");
+            throw new ResourceNotFoundException("Address not found");
         }
 
         addressRepository.deleteById(address.getId());

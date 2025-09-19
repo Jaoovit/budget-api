@@ -5,7 +5,7 @@ import com.oliveira.budget.domain.product.Product;
 import com.oliveira.budget.domain.product.RequestProductDTO;
 import com.oliveira.budget.domain.product.UpdateProductDTO;
 import com.oliveira.budget.domain.user.User;
-import com.oliveira.budget.exception.InvalidLengthException;
+import com.oliveira.budget.exception.InvalidInputException;
 import com.oliveira.budget.exception.ResourceNotFoundException;
 import com.oliveira.budget.repositories.ProductRepository;
 import com.oliveira.budget.repositories.UserRepository;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,20 +32,20 @@ public class ProductService {
         Product product = new Product();
 
         if (data.name().length() > 100) {
-            throw new InvalidLengthException("Name is too long. Maximum length is 100");
+            throw new InvalidInputException("Name is too long. Maximum length is 100");
         }
 
         product.setName(data.name());
 
         if (data.name().length() > 250) {
-            throw new InvalidLengthException("Description is too long. Maximum length is 250");
+            throw new InvalidInputException("Description is too long. Maximum length is 250");
         }
 
         product.setDescription(data.description());
         product.setPrice(data.price());
 
         if (data.userId() == null) {
-            throw new InvalidLengthException("User is required");
+            throw new InvalidInputException("User is required");
         }
 
         User user = userRepository.findUserById(data.userId());
@@ -119,13 +118,13 @@ public class ProductService {
         product.setName(data.name());
 
         if (data.name().length() > 100) {
-            throw new InvalidLengthException("Name is too long. Maximum length is 100");
+            throw new InvalidInputException("Name is too long. Maximum length is 100");
         }
 
         product.setDescription(data.description());
 
         if (data.name().length() > 250) {
-            throw new InvalidLengthException("Description is too long. Maximum length is 250");
+            throw new InvalidInputException("Description is too long. Maximum length is 250");
         }
 
         product.setPrice(data.price());

@@ -4,7 +4,7 @@ import com.oliveira.budget.domain.budget.*;
 import com.oliveira.budget.domain.client.Client;
 import com.oliveira.budget.domain.item.RequestItemDTO;
 import com.oliveira.budget.domain.product.RequestProductDTO;
-import com.oliveira.budget.exception.InvalidLengthException;
+import com.oliveira.budget.exception.InvalidInputException;
 import com.oliveira.budget.exception.ResourceNotFoundException;
 import com.oliveira.budget.repositories.BudgetRepository;
 import com.oliveira.budget.repositories.ClientRepository;
@@ -34,13 +34,13 @@ public class BudgetService {
         Budget budget = new Budget();
 
         if (data.name().length() > 100) {
-            throw new InvalidLengthException("Name is too long. Maximum length is 100");
+            throw new InvalidInputException("Name is too long. Maximum length is 100");
         }
 
         budget.setName(data.name());
 
         if (data.name().length() > 250) {
-            throw new InvalidLengthException("Description is too long. Maximum length is 250");
+            throw new InvalidInputException("Description is too long. Maximum length is 250");
         }
 
         budget.setDescription(data.description());
@@ -120,17 +120,17 @@ public class BudgetService {
         Budget budget = budgetRepository.findBudgetById(id);
 
         if (budget == null) {
-            throw new InvalidLengthException("Budget not found");
+            throw new ResourceNotFoundException("Budget not found");
         }
 
         if (data.name().length() > 100) {
-            throw new InvalidLengthException("Name is too long. Maximum length is 100");
+            throw new InvalidInputException("Name is too long. Maximum length is 100");
         }
 
         budget.setName(data.name());
 
         if (data.name().length() > 250) {
-            throw new InvalidLengthException("Description is too long. Maximum length is 250");
+            throw new InvalidInputException("Description is too long. Maximum length is 250");
         }
 
         budget.setDescription(data.description());

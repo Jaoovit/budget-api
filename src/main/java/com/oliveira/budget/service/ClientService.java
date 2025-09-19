@@ -1,11 +1,10 @@
 package com.oliveira.budget.service;
 
-import com.oliveira.budget.domain.address.Address;
 import com.oliveira.budget.domain.address.CreateAddressDTO;
 import com.oliveira.budget.domain.address.RequestAddressDTO;
 import com.oliveira.budget.domain.client.*;
 import com.oliveira.budget.domain.user.User;
-import com.oliveira.budget.exception.InvalidLengthException;
+import com.oliveira.budget.exception.InvalidInputException;
 import com.oliveira.budget.exception.ResourceNotFoundException;
 import com.oliveira.budget.repositories.ClientRepository;
 import com.oliveira.budget.repositories.UserRepository;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,7 +33,7 @@ public class ClientService {
         Client client = new Client();
 
         if (data.name().length() > 100) {
-            throw new InvalidLengthException("Name is too long. Maximum length is 100");
+            throw new InvalidInputException("Name is too long. Maximum length is 100");
         }
 
         client.setName(data.name());
@@ -43,7 +41,7 @@ public class ClientService {
         client.setPhone(data.phone());
 
         if (data.userId() == null) {
-            throw new InvalidLengthException("User is required");
+            throw new InvalidInputException("User is required");
         }
 
         User user = userRepository.findUserById(data.userId());
@@ -123,7 +121,7 @@ public class ClientService {
         Client client = clientRepository.findClientById(id);
 
         if (client == null) {
-            throw new InvalidLengthException("Client not found");
+            throw new ResourceNotFoundException("Client not found");
         }
 
         addressService.deleteAddress(client.getAddress().getId());

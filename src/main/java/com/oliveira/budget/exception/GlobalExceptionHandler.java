@@ -19,14 +19,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
-    @ExceptionHandler(InvalidLengthException.class)
-    public ResponseEntity<Map<String, String>> handleInvalidLength(ResourceNotFoundException ex) {
-        Map<String, String> response = new HashMap<>();
-        response.put("error", ex.getMessage());
-        response.put("status", HttpStatus.BAD_REQUEST.toString());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-    }
-
     @ExceptionHandler(InvalidInputException.class)
     public ResponseEntity<Map<String, String>> invalidInputException(ResourceNotFoundException ex) {
         Map<String, String> response = new HashMap<>();
