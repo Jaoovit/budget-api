@@ -24,7 +24,7 @@ public class AuthService {
 
     public User register(RequestUserDTO data) {
 
-        if (userRepository.findUser(data.email()) != null) {
+        if (userRepository.findUserByEmail(data.email()) != null) {
             throw new InvalidInputException("Email already registered");
         }
 
@@ -48,7 +48,7 @@ public class AuthService {
     }
 
     public TokenDTO login(AuthUserDTO data) {
-        User user = userRepository.findUser(data.email());
+        User user = userRepository.findUserByEmail(data.email());
 
         if (user == null) {
             throw new ResourceNotFoundException("User not found");
