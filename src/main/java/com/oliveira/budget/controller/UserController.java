@@ -1,6 +1,6 @@
 package com.oliveira.budget.controller;
 
-import com.oliveira.budget.domain.user.RequestUserDTO;
+import com.oliveira.budget.domain.user.ResponseUserDTO;
 import com.oliveira.budget.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +16,8 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<RequestUserDTO> getUserById(@PathVariable UUID id) {
-        RequestUserDTO user = userService.getUserById(id);
+    public ResponseEntity<ResponseUserDTO> getUserById(@PathVariable UUID id) {
+        ResponseUserDTO user = userService.getUserById(id);
         return ResponseEntity.ok(user);
     }
 }
