@@ -3,6 +3,7 @@ package com.oliveira.budget.service;
 import com.oliveira.budget.domain.auth.TokenDTO;
 import com.oliveira.budget.domain.user.AuthUserDTO;
 import com.oliveira.budget.domain.user.RequestUserDTO;
+import com.oliveira.budget.domain.user.ResponseUserDTO;
 import com.oliveira.budget.domain.user.User;
 import com.oliveira.budget.exception.InvalidInputException;
 import com.oliveira.budget.exception.ResourceNotFoundException;
@@ -22,7 +23,7 @@ public class AuthService {
     @Autowired
     private JwtUtil jwtUtil;
 
-    public User register(RequestUserDTO data) {
+    public ResponseUserDTO register(RequestUserDTO data) {
 
         if (userRepository.findUserByEmail(data.email()) != null) {
             throw new InvalidInputException("Email already registered");
@@ -44,7 +45,7 @@ public class AuthService {
 
         user.setPassword(null);
 
-        return user;
+        return new ResponseUserDTO(user.getId(), user.getEmail(), user.getName());
     }
 
     public TokenDTO login(AuthUserDTO data) {
