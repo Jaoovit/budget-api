@@ -3,7 +3,7 @@ package com.oliveira.budget.service;
 import com.oliveira.budget.domain.budget.*;
 import com.oliveira.budget.domain.client.Client;
 import com.oliveira.budget.domain.item.RequestItemDTO;
-import com.oliveira.budget.domain.product.RequestProductDTO;
+import com.oliveira.budget.domain.product.ResponseProductDTO;
 import com.oliveira.budget.exception.InvalidInputException;
 import com.oliveira.budget.exception.ResourceNotFoundException;
 import com.oliveira.budget.repositories.BudgetRepository;
@@ -87,7 +87,7 @@ public class BudgetService {
         Float totalPrice = 0F;
 
         for (RequestItemDTO item : items) {
-            RequestProductDTO product = productService.getProductById(item.productId());
+            ResponseProductDTO product = productService.getProductById(item.productId());
             totalPrice += product.price() * item.quantity();
         }
 

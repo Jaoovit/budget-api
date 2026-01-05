@@ -1,8 +1,8 @@
 package com.oliveira.budget.service;
 
-import com.oliveira.budget.domain.product.CreateProductDTO;
-import com.oliveira.budget.domain.product.Product;
 import com.oliveira.budget.domain.product.RequestProductDTO;
+import com.oliveira.budget.domain.product.Product;
+import com.oliveira.budget.domain.product.ResponseProductDTO;
 import com.oliveira.budget.domain.product.UpdateProductDTO;
 import com.oliveira.budget.domain.user.User;
 import com.oliveira.budget.exception.InvalidInputException;
@@ -27,7 +27,7 @@ public class ProductService {
     @Autowired
     private UserRepository userRepository;
 
-    public CreateProductDTO createProduct(CreateProductDTO data) {
+    public RequestProductDTO createProduct(RequestProductDTO data) {
 
         Product product = new Product();
 
@@ -37,7 +37,7 @@ public class ProductService {
 
         product.setName(data.name());
 
-        if (data.name().length() > 250) {
+        if (data.description().length() > 250) {
             throw new InvalidInputException("Description is too long. Maximum length is 250");
         }
 
@@ -58,7 +58,7 @@ public class ProductService {
 
         productRepository.save(product);
 
-        return new CreateProductDTO(
+        return new RequestProductDTO(
                 product.getId(),
                 product.getName(),
                 product.getDescription(),
@@ -66,14 +66,14 @@ public class ProductService {
                 product.getUser().getId());
     }
 
-    public RequestProductDTO getProductById(UUID id) {
+    public ResponseProductDTO getProductById(UUID id) {
         Product product = productRepository.findProductById(id);
 
         if (product == null) {
             throw new ResourceNotFoundException("Product not found");
         }
 
-        return new RequestProductDTO(
+        return new ResponseProductDTO(
                 product.getId(),
                 product.getName(),
                 product.getDescription(),
@@ -81,13 +81,13 @@ public class ProductService {
         );
     }
 
-    public List<RequestProductDTO> getProductsByUserID(int page, int size, UUID userId) {
+    public List<ResponseProductDTO> getProductsByUserID(int page, int size, UUID userId) {
 
         Pageable pageable = PageRequest.of(page, size);
 
         Page<Product> productPage = productRepository.findProductsByUserId(userId, pageable);
 
-        return productPage.map(product -> new RequestProductDTO(
+        return productPage.map(product -> new ResponseProductDTO(
                 product.getId(),
                 product.getName(),
                 product.getDescription(),
@@ -95,12 +95,12 @@ public class ProductService {
         ).stream().toList();
     }
 
-    public List<RequestProductDTO> searchProducts(int page, int size, UUID userId, String search) {
+    public List<ResponseProductDTO> searchProducts(int page, int size, UUID userId, String search) {
         Pageable pageable = PageRequest.of(page, size);
 
         Page<Product> productPage = productRepository.searchProducts(userId, search, pageable);
 
-        return productPage.map(product -> new RequestProductDTO(
+        return productPage.map(product -> new ResponseProductDTO(
                 product.getId(),
                 product.getName(),
                 product.getDescription(),
@@ -108,7 +108,7 @@ public class ProductService {
         ).stream().toList();
     }
 
-    public RequestProductDTO updateProduct(UUID id, UpdateProductDTO data) {
+    public ResponseProductDTO updateProduct(UUID id, UpdateProductDTO data) {
         Product product = productRepository.findProductById(id);
 
         if (product == null) {
@@ -131,7 +131,7 @@ public class ProductService {
 
         productRepository.updateProduct(id, data.name(), data.description(), data.price());
 
-        return new RequestProductDTO(
+        return new ResponseProductDTO(
                 product.getId(),
                 product.getName(),
                 product.getDescription(),

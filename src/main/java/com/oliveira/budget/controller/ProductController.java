@@ -1,7 +1,7 @@
 package com.oliveira.budget.controller;
 
-import com.oliveira.budget.domain.product.CreateProductDTO;
 import com.oliveira.budget.domain.product.RequestProductDTO;
+import com.oliveira.budget.domain.product.ResponseProductDTO;
 import com.oliveira.budget.domain.product.UpdateProductDTO;
 import com.oliveira.budget.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,39 +19,39 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping
-    public ResponseEntity<CreateProductDTO> createProduct(@RequestBody CreateProductDTO data) {
-        CreateProductDTO product = productService.createProduct(data);
+    public ResponseEntity<RequestProductDTO> createProduct(@RequestBody RequestProductDTO data) {
+        RequestProductDTO product = productService.createProduct(data);
         return ResponseEntity.ok(product);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RequestProductDTO> getProductById(@PathVariable UUID id) {
-        RequestProductDTO product = productService.getProductById(id);
+    public ResponseEntity<ResponseProductDTO> getProductById(@PathVariable UUID id) {
+        ResponseProductDTO product = productService.getProductById(id);
         return ResponseEntity.ok(product);
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<RequestProductDTO>> getProductsByUserId(
+    public ResponseEntity<List<ResponseProductDTO>> getProductsByUserId(
             @PathVariable UUID userId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        List<RequestProductDTO> products = productService.getProductsByUserID(page, size, userId);
+        List<ResponseProductDTO> products = productService.getProductsByUserID(page, size, userId);
         return ResponseEntity.ok(products);
     }
 
     @GetMapping("/search/user/{userId}")
-    public ResponseEntity<List<RequestProductDTO>> searchProducts(@PathVariable UUID userId,
-                                                                  @RequestParam(defaultValue = "0") int page,
-                                                                  @RequestParam(defaultValue = "10") int size,
-                                                                  @RequestParam String search) {
-        List<RequestProductDTO> products = productService.searchProducts(page, size, userId, search);
+    public ResponseEntity<List<ResponseProductDTO>> searchProducts(@PathVariable UUID userId,
+                                                                   @RequestParam(defaultValue = "0") int page,
+                                                                   @RequestParam(defaultValue = "10") int size,
+                                                                   @RequestParam String search) {
+        List<ResponseProductDTO> products = productService.searchProducts(page, size, userId, search);
         return ResponseEntity.ok(products);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RequestProductDTO> updateProduct(@PathVariable UUID id, @RequestBody UpdateProductDTO data) {
-        RequestProductDTO product = productService.updateProduct(id, data);
+    public ResponseEntity<ResponseProductDTO> updateProduct(@PathVariable UUID id, @RequestBody UpdateProductDTO data) {
+        ResponseProductDTO product = productService.updateProduct(id, data);
         return ResponseEntity.ok(product);
     }
 
