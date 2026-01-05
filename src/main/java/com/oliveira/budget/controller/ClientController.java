@@ -1,6 +1,5 @@
 package com.oliveira.budget.controller;
 
-import com.oliveira.budget.domain.client.CreateClientDTO;
 import com.oliveira.budget.domain.client.RequestClientDTO;
 import com.oliveira.budget.domain.client.ResponseClientDTO;
 import com.oliveira.budget.domain.client.UpdateClientDTO;
@@ -20,36 +19,36 @@ public class ClientController {
     private ClientService clientService;
 
     @PostMapping
-    public ResponseEntity<ResponseClientDTO> createClient(@RequestBody CreateClientDTO data) {
-        ResponseClientDTO client = clientService.createClient(data);
+    public ResponseEntity<RequestClientDTO> createClient(@RequestBody RequestClientDTO data) {
+        RequestClientDTO client = clientService.createClient(data);
         return ResponseEntity.ok(client);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<RequestClientDTO> getClientById(@PathVariable UUID id) {
-        RequestClientDTO client = clientService.getClientById(id);
+    public ResponseEntity<ResponseClientDTO> getClientById(@PathVariable UUID id) {
+        ResponseClientDTO client = clientService.getClientById(id);
         return ResponseEntity.ok(client);
     }
 
     @GetMapping("user/{userId}")
-    public ResponseEntity<List<RequestClientDTO>> getClientsByUserId(
+    public ResponseEntity<List<ResponseClientDTO>> getClientsByUserId(
             @PathVariable UUID userId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        List<RequestClientDTO> clients = clientService.getClientsByUserId(page, size, userId);
+        List<ResponseClientDTO> clients = clientService.getClientsByUserId(page, size, userId);
         return ResponseEntity.ok(clients);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<RequestClientDTO> updateClientById(@PathVariable UUID id, @RequestBody UpdateClientDTO data) {
-        RequestClientDTO client = clientService.updateClient(id, data);
+    public ResponseEntity<ResponseClientDTO> updateClientById(@PathVariable UUID id, @RequestBody UpdateClientDTO data) {
+        ResponseClientDTO client = clientService.updateClient(id, data);
         return ResponseEntity.ok(client);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity deleteClient(@PathVariable UUID id) {
+    public ResponseEntity<Void> deleteClient(@PathVariable UUID id) {
         clientService.deleteClient(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,12 +1,13 @@
 package com.oliveira.budget.domain.client;
 
-import com.oliveira.budget.domain.address.RequestAddressDTO;
-
 import java.util.UUID;
 
-public record RequestClientDTO(UUID id,
-                               String name,
+public record RequestClientDTO(String name,
                                String email,
                                String phone,
-                               RequestAddressDTO address) {
+                               UUID userId,
+                               String state,
+                               String city,
+                               String street,
+                               String number) {
 }

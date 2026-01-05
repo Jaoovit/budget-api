@@ -29,7 +29,7 @@ public class ClientService {
     @Autowired
     private AddressService addressService;
 
-    public ResponseClientDTO createClient(CreateClientDTO data) {
+    public RequestClientDTO createClient(RequestClientDTO data) {
         Client client = new Client();
 
         if (data.name().length() > 100) {
@@ -58,15 +58,19 @@ public class ClientService {
 
         addressService.createAddress(createAddressDTO);
 
-        return new ResponseClientDTO(
+        return new RequestClientDTO(
                 client.getName(),
                 client.getEmail(),
                 client.getPhone(),
-                client.getUser().getId());
+                client.getUser().getId(),
+                client.getAddress().getState(),
+                client.getAddress().getCity(),
+                client.getAddress().getStreet(),
+                client.getAddress().getNumber());
     }
 
-    public RequestClientDTO getClientById(UUID clientId) {
-        Client client = clientRepository.getReferenceById(clientId);
+    public ResponseClientDTO getClientById(UUID clientId) {
+        Client client = clientRepository.findClientById(clientId);
 
         if (client == null) {
             throw new ResourceNotFoundException("Client not found");
@@ -74,7 +78,7 @@ public class ClientService {
 
         RequestAddressDTO address = addressService.getAddressByClientId(clientId);
 
-        return new RequestClientDTO(
+        return new ResponseClientDTO(
                 client.getId(),
                 client.getName(),
                 client.getEmail(),
@@ -83,12 +87,12 @@ public class ClientService {
         );
     }
 
-    public List<RequestClientDTO> getClientsByUserId(int page, int size, UUID userId) {
+    public List<ResponseClientDTO> getClientsByUserId(int page, int size, UUID userId) {
         Pageable pageable = PageRequest.of(page, size);
 
         Page<Client> clients = clientRepository.findClientsByUserId(userId, pageable);
 
-        return clients.map(client -> new RequestClientDTO(
+        return clients.map(client -> new ResponseClientDTO(
                 client.getId(),
                 client.getName(),
                 client.getEmail(),
@@ -97,8 +101,8 @@ public class ClientService {
         ).stream().toList();
     }
 
-    public RequestClientDTO updateClient(UUID id, UpdateClientDTO data) {
-        Client client = clientRepository.getReferenceById(id);
+    public ResponseClientDTO updateClient(UUID id, UpdateClientDTO data) {
+        Client client = clientRepository.findClientById(id);
 
         if (client == null) {
             throw new ResourceNotFoundException("Client not found");
@@ -114,7 +118,7 @@ public class ClientService {
 
         addressService.updateAddress(id, address);
 
-        return new RequestClientDTO(client.getId(), client.getName(), client.getEmail(), client.getPhone(), address);
+        return new ResponseClientDTO(client.getId(), client.getName(), client.getEmail(), client.getPhone(), address);
     }
 
     public void deleteClient(UUID id) {
