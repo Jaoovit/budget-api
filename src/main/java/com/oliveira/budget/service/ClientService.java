@@ -1,7 +1,7 @@
 package com.oliveira.budget.service;
 
-import com.oliveira.budget.domain.address.CreateAddressDTO;
 import com.oliveira.budget.domain.address.RequestAddressDTO;
+import com.oliveira.budget.domain.address.ResponseAddressDTO;
 import com.oliveira.budget.domain.client.*;
 import com.oliveira.budget.domain.user.User;
 import com.oliveira.budget.exception.InvalidInputException;
@@ -54,7 +54,7 @@ public class ClientService {
 
         clientRepository.save(client);
 
-        CreateAddressDTO createAddressDTO = new CreateAddressDTO(data.state(), data.city(), data.street(), data.number(), client);
+        RequestAddressDTO createAddressDTO = new RequestAddressDTO(data.state(), data.city(), data.street(), data.number(), client);
 
         addressService.createAddress(createAddressDTO);
 
@@ -76,7 +76,7 @@ public class ClientService {
             throw new ResourceNotFoundException("Client not found");
         }
 
-        RequestAddressDTO address = addressService.getAddressByClientId(clientId);
+        ResponseAddressDTO address = addressService.getAddressByClientId(clientId);
 
         return new ResponseClientDTO(
                 client.getId(),
@@ -114,7 +114,7 @@ public class ClientService {
 
         clientRepository.updateClient(id, client.getName(), client.getEmail(), client.getPhone());
 
-        RequestAddressDTO address = new RequestAddressDTO(data.state(), data.city(), data.street(), data.number());
+        ResponseAddressDTO address = new ResponseAddressDTO(data.state(), data.city(), data.street(), data.number());
 
         addressService.updateAddress(id, address);
 

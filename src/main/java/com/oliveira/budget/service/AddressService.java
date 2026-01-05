@@ -1,8 +1,8 @@
 package com.oliveira.budget.service;
 
 import com.oliveira.budget.domain.address.Address;
-import com.oliveira.budget.domain.address.CreateAddressDTO;
 import com.oliveira.budget.domain.address.RequestAddressDTO;
+import com.oliveira.budget.domain.address.ResponseAddressDTO;
 import com.oliveira.budget.domain.client.Client;
 import com.oliveira.budget.exception.ResourceNotFoundException;
 import com.oliveira.budget.repositories.AddressRepository;
@@ -21,7 +21,7 @@ public class AddressService {
     @Autowired
     private ClientRepository clientRepository;
 
-    public Address createAddress(CreateAddressDTO data) {
+    public Address createAddress(RequestAddressDTO data) {
         Address address = new Address();
 
         address.setState(data.state());
@@ -39,14 +39,14 @@ public class AddressService {
         return address;
     }
 
-    public RequestAddressDTO getAddressByClientId(UUID clientId) {
+    public ResponseAddressDTO getAddressByClientId(UUID clientId) {
         Address address = addressRepository.findAddressByClientId(clientId);
 
         if (address == null) {
             throw new ResourceNotFoundException("Address not found");
         }
 
-        return new RequestAddressDTO(
+        return new ResponseAddressDTO(
                 address.getState(),
                 address.getCity(),
                 address.getStreet(),
@@ -54,7 +54,7 @@ public class AddressService {
         );
     }
 
-    public RequestAddressDTO updateAddress(UUID id, RequestAddressDTO data) {
+    public ResponseAddressDTO updateAddress(UUID id, ResponseAddressDTO data) {
         Address address = addressRepository.findAddressByClientId(id);
 
         if (address == null) {
@@ -68,7 +68,7 @@ public class AddressService {
 
         addressRepository.updateAddress(id, data.state(), data.city(), data.street(), data.number());
 
-        return new RequestAddressDTO(address.getState(), address.getCity(), address.getStreet(), address.getNumber());
+        return new ResponseAddressDTO(address.getState(), address.getCity(), address.getStreet(), address.getNumber());
     }
 
     public void deleteAddress(UUID id) {
