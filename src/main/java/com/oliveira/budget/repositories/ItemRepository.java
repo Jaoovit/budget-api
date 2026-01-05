@@ -1,7 +1,6 @@
 package com.oliveira.budget.repositories;
 
 import com.oliveira.budget.domain.item.Item;
-import com.oliveira.budget.domain.item.RequestItemDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -13,11 +12,13 @@ import java.util.UUID;
 
 public interface ItemRepository extends JpaRepository<Item, UUID> {
 
+    Item findItemById(UUID id);
+
     @Query("SELECT e FROM Item e LEFT JOIN e.budget a WHERE a.id = :budgetId")
-    public List<Item> findItemByBudgetId(@Param("budgetId") UUID budgetId);
+    List<Item> findItemByBudgetId(@Param("budgetId") UUID budgetId);
 
     @Transactional
     @Modifying
     @Query("UPDATE Item e SET e.quantity = :quantity WHERE e.id = :id")
-    public int updateItemQuantity(@Param("id") UUID id, @Param("quantity") int quantity);
+   int updateItemQuantity(@Param("id") UUID id, @Param("quantity") int quantity);
 }

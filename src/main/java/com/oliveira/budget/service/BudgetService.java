@@ -2,7 +2,7 @@ package com.oliveira.budget.service;
 
 import com.oliveira.budget.domain.budget.*;
 import com.oliveira.budget.domain.client.Client;
-import com.oliveira.budget.domain.item.RequestItemDTO;
+import com.oliveira.budget.domain.item.ResponseItemDTO;
 import com.oliveira.budget.domain.product.ResponseProductDTO;
 import com.oliveira.budget.exception.InvalidInputException;
 import com.oliveira.budget.exception.ResourceNotFoundException;
@@ -82,11 +82,11 @@ public class BudgetService {
             throw new ResourceNotFoundException("Budget not found");
         }
 
-        List<RequestItemDTO> items = itemService.getItemsByBudgetId(budget.getId());
+        List<ResponseItemDTO> items = itemService.getItemsByBudgetId(budget.getId());
 
         Float totalPrice = 0F;
 
-        for (RequestItemDTO item : items) {
+        for (ResponseItemDTO item : items) {
             ResponseProductDTO product = productService.getProductById(item.productId());
             totalPrice += product.price() * item.quantity();
         }

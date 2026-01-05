@@ -2,9 +2,9 @@ package com.oliveira.budget.service;
 
 import com.oliveira.budget.domain.budget.Budget;
 import com.oliveira.budget.domain.item.ChangeQuantityDTO;
-import com.oliveira.budget.domain.item.CreateItemDTO;
-import com.oliveira.budget.domain.item.Item;
 import com.oliveira.budget.domain.item.RequestItemDTO;
+import com.oliveira.budget.domain.item.Item;
+import com.oliveira.budget.domain.item.ResponseItemDTO;
 import com.oliveira.budget.domain.product.Product;
 import com.oliveira.budget.exception.ResourceNotFoundException;
 import com.oliveira.budget.repositories.BudgetRepository;
@@ -29,7 +29,7 @@ public class ItemService {
     @Autowired
     private BudgetRepository budgetRepository;
 
-    public CreateItemDTO createItem(CreateItemDTO data) {
+    public RequestItemDTO createItem(RequestItemDTO data) {
         Item item = new Item();
 
         Product product = productRepository.findProductById(data.productId());
@@ -50,10 +50,10 @@ public class ItemService {
 
         itemRepository.save(item);
 
-        return new CreateItemDTO(item.getQuantity(), item.getProduct().getId(), item.getBudget().getId());
+        return new RequestItemDTO(item.getQuantity(), item.getProduct().getId(), item.getBudget().getId());
     }
 
-    public List<RequestItemDTO> getItemsByBudgetId(UUID budgetId) {
+    public List<ResponseItemDTO> getItemsByBudgetId(UUID budgetId) {
         Budget budget = budgetRepository.findBudgetById(budgetId);
 
         if (budget == null) {
@@ -63,7 +63,7 @@ public class ItemService {
         List<Item> items = itemRepository.findItemByBudgetId(budget.getId());
 
         return items.stream()
-                .map(item -> new RequestItemDTO(
+                .map(item -> new ResponseItemDTO(
                         item.getId(),
                         item.getQuantity(),
                         item.getProduct().getId(),
@@ -71,8 +71,8 @@ public class ItemService {
                 .collect(Collectors.toList());
     }
 
-    public RequestItemDTO updateItemQuantity(UUID id, ChangeQuantityDTO data) {
-        Item item = itemRepository.getReferenceById(id);
+    public ResponseItemDTO updateItemQuantity(UUID id, ChangeQuantityDTO data) {
+        Item item = itemRepository.findItemById(id);
 
         if (item == null) {
             throw new ResourceNotFoundException("Item not found");
@@ -82,7 +82,7 @@ public class ItemService {
 
         itemRepository.updateItemQuantity(id, data.quantity());
 
-        return new RequestItemDTO(
+        return new ResponseItemDTO(
                 item.getId(),
                 item.getQuantity(),
                 item.getProduct().getId(),
@@ -91,7 +91,7 @@ public class ItemService {
     }
 
     public void deleteItem(UUID id) {
-        Item item = itemRepository.getReferenceById(id);
+        Item item = itemRepository.findItemById(id);
 
         if (item == null) {
             throw new ResourceNotFoundException("Item not found");
