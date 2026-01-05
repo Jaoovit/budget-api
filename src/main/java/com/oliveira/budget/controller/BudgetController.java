@@ -1,7 +1,6 @@
 package com.oliveira.budget.controller;
 
-import com.oliveira.budget.domain.budget.CreateBudgetDTO;
-import com.oliveira.budget.domain.budget.GetBudgetDTO;
+import com.oliveira.budget.domain.budget.ResponseBudgetDTO;
 import com.oliveira.budget.domain.budget.RequestBudgetDTO;
 import com.oliveira.budget.domain.budget.UpdateBudgetDTO;
 import com.oliveira.budget.service.BudgetService;
@@ -20,32 +19,32 @@ public class BudgetController {
     private BudgetService budgetService;
 
     @PostMapping
-    public ResponseEntity<RequestBudgetDTO> createBudget(@RequestBody CreateBudgetDTO data) {
+    public ResponseEntity<RequestBudgetDTO> createBudget(@RequestBody RequestBudgetDTO data) {
         RequestBudgetDTO budget = budgetService.createBudget(data);
         return ResponseEntity.ok(budget);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetBudgetDTO> getBudgetById(@PathVariable UUID id) {
-        GetBudgetDTO budget = budgetService.getBudgetById(id);
+    public ResponseEntity<ResponseBudgetDTO> getBudgetById(@PathVariable UUID id) {
+        ResponseBudgetDTO budget = budgetService.getBudgetById(id);
         return ResponseEntity.ok(budget);
     }
 
     @GetMapping("/clients/{clientId}")
-    public ResponseEntity<List<GetBudgetDTO>> getBudgetsByClientId(@PathVariable UUID clientId) {
-        List<GetBudgetDTO> budgets = budgetService.getBudgetByClientId(clientId);
+    public ResponseEntity<List<ResponseBudgetDTO>> getBudgetsByClientId(@PathVariable UUID clientId) {
+        List<ResponseBudgetDTO> budgets = budgetService.getBudgetByClientId(clientId);
         return ResponseEntity.ok(budgets);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RequestBudgetDTO> updateBudget(@PathVariable UUID id, @RequestBody UpdateBudgetDTO data) {
-        RequestBudgetDTO budget = budgetService.updateBudget(data, id);
+    public ResponseEntity<ResponseBudgetDTO> updateBudget(@PathVariable UUID id, @RequestBody UpdateBudgetDTO data) {
+        ResponseBudgetDTO budget = budgetService.updateBudget(data, id);
         return ResponseEntity.ok(budget);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<GetBudgetDTO> approveBudget(@PathVariable UUID id) {
-        GetBudgetDTO budget = budgetService.approvedBudget(id);
+    public ResponseEntity<ResponseBudgetDTO> approveBudget(@PathVariable UUID id) {
+        ResponseBudgetDTO budget = budgetService.approvedBudget(id);
         return ResponseEntity.ok(budget);
     }
 

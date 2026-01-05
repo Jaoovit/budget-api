@@ -7,6 +7,7 @@ public record RequestBudgetDTO(String name,
                                String description,
                                Date createdDate,
                                Date validDate,
+                               int monthValid,
                                Boolean approved,
                                UUID clientId) {
 }

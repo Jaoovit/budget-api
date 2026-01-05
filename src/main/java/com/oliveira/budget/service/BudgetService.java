@@ -30,7 +30,7 @@ public class BudgetService {
     @Autowired
     private ProductService productService;
 
-    public RequestBudgetDTO createBudget(CreateBudgetDTO data) {
+    public RequestBudgetDTO createBudget(RequestBudgetDTO data) {
         Budget budget = new Budget();
 
         if (data.name().length() > 100) {
@@ -39,7 +39,7 @@ public class BudgetService {
 
         budget.setName(data.name());
 
-        if (data.name().length() > 250) {
+        if (data.description().length() > 250) {
             throw new InvalidInputException("Description is too long. Maximum length is 250");
         }
 
@@ -71,27 +71,21 @@ public class BudgetService {
                 budget.getDescription(),
                 budget.getCreatedDate(),
                 budget.getValidDate(),
+                data.monthValid(),
                 budget.getApproved(),
                 budget.getClient().getId());
     }
 
-    public GetBudgetDTO getBudgetById(UUID id) {
+    public ResponseBudgetDTO getBudgetById(UUID id) {
         Budget budget = budgetRepository.findBudgetById(id);
 
         if (budget == null) {
             throw new ResourceNotFoundException("Budget not found");
         }
 
-        List<ResponseItemDTO> items = itemService.getItemsByBudgetId(budget.getId());
+        float totalPrice = calculateTotalPrice(budget);
 
-        Float totalPrice = 0F;
-
-        for (ResponseItemDTO item : items) {
-            ResponseProductDTO product = productService.getProductById(item.productId());
-            totalPrice += product.price() * item.quantity();
-        }
-
-        return new GetBudgetDTO(
+        return new ResponseBudgetDTO(
                 budget.getId(),
                 budget.getName(),
                 budget.getDescription(),
@@ -102,7 +96,20 @@ public class BudgetService {
         );
     }
 
-    public List<GetBudgetDTO> getBudgetByClientId(UUID clientId) {
+    private float calculateTotalPrice(Budget budget) {
+        List<ResponseItemDTO> items = itemService.getItemsByBudgetId(budget.getId());
+
+        float totalPrice = 0F;
+
+        for (ResponseItemDTO item : items) {
+            ResponseProductDTO product = productService.getProductById(item.productId());
+            totalPrice += product.price() * item.quantity();
+        }
+
+        return totalPrice;
+    }
+
+    public List<ResponseBudgetDTO> getBudgetByClientId(UUID clientId) {
         Client client = clientRepository.findClientById(clientId);
 
         if (client == null) {
@@ -116,7 +123,7 @@ public class BudgetService {
                 .toList();
     }
 
-    public RequestBudgetDTO updateBudget(UpdateBudgetDTO data, UUID id) {
+    public ResponseBudgetDTO updateBudget(UpdateBudgetDTO data, UUID id) {
         Budget budget = budgetRepository.findBudgetById(id);
 
         if (budget == null) {
@@ -129,7 +136,7 @@ public class BudgetService {
 
         budget.setName(data.name());
 
-        if (data.name().length() > 250) {
+        if (data.description().length() > 250) {
             throw new InvalidInputException("Description is too long. Maximum length is 250");
         }
 
@@ -137,15 +144,19 @@ public class BudgetService {
 
         budgetRepository.updateBudget(id, data.name(), data.description());
 
-        return new RequestBudgetDTO(budget.getName(),
+        float totalPrice = calculateTotalPrice(budget);
+
+        return new ResponseBudgetDTO(
+                budget.getId(),
+                budget.getName(),
                 budget.getDescription(),
                 budget.getCreatedDate(),
                 budget.getValidDate(),
-                budget.getApproved(),
-                budget.getClient().getId());
+                totalPrice,
+                budget.getApproved());
     }
 
-    public GetBudgetDTO approvedBudget(UUID id) {
+    public ResponseBudgetDTO approvedBudget(UUID id) {
         Budget budget = budgetRepository.findBudgetById(id);
 
         if (budget == null) {
