@@ -29,4 +29,10 @@ public class ItemController {
         return ResponseEntity.ok(item);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteItem(@PathVariable UUID id) {
+        itemService.deleteItem(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
