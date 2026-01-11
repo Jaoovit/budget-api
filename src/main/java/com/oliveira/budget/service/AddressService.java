@@ -21,7 +21,7 @@ public class AddressService {
     @Autowired
     private ClientRepository clientRepository;
 
-    public Address createAddress(RequestAddressDTO data) {
+    public void createAddress(RequestAddressDTO data) {
         Address address = new Address();
 
         address.setState(data.state());
@@ -35,8 +35,6 @@ public class AddressService {
         address.setClient(client);
 
         addressRepository.save(address);
-
-        return address;
     }
 
     public ResponseAddressDTO getAddressByClientId(UUID clientId) {
@@ -54,7 +52,7 @@ public class AddressService {
         );
     }
 
-    public ResponseAddressDTO updateAddress(UUID id, ResponseAddressDTO data) {
+    public void updateAddress(UUID id, ResponseAddressDTO data) {
         Address address = addressRepository.findAddressByClientId(id);
 
         if (address == null) {
@@ -67,8 +65,6 @@ public class AddressService {
         address.setNumber(data.number());
 
         addressRepository.updateAddress(id, data.state(), data.city(), data.street(), data.number());
-
-        return new ResponseAddressDTO(address.getState(), address.getCity(), address.getStreet(), address.getNumber());
     }
 
     public void deleteAddress(UUID id) {
