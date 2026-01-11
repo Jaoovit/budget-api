@@ -13,18 +13,18 @@ import java.util.UUID;
 public interface BudgetRepository extends JpaRepository<Budget, UUID> {
 
     @Query("SELECT e FROM Budget e WHERE e.id = :id")
-    public Budget findBudgetById(@Param("id") UUID id);
+    Budget findBudgetById(@Param("id") UUID id);
 
     @Query("SELECT e FROM Budget e LEFT JOIN e.client a WHERE a.id = :clientId")
-    public List<Budget> findBudgetByClientId(@Param("clientId") UUID clientId);
+    List<Budget> findBudgetByClientId(@Param("clientId") UUID clientId);
 
     @Transactional
     @Modifying
     @Query("UPDATE Budget e SET e.approved = :approved WHERE e.id = :id")
-    public int approveBudget(@Param("id") UUID id, @Param("approved") Boolean approved);
+    void approveBudget(@Param("id") UUID id, @Param("approved") Boolean approved);
 
     @Transactional
     @Modifying
     @Query("UPDATE Budget e SET e.name = :name, e.description = :description WHERE e.id = :id")
-    public int updateBudget(@Param("id") UUID id, @Param("name") String name, @Param("description") String description);
+    void updateBudget(@Param("id") UUID id, @Param("name") String name, @Param("description") String description);
 }

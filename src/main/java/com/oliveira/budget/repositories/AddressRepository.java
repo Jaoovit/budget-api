@@ -12,18 +12,18 @@ import java.util.UUID;
 public interface AddressRepository extends JpaRepository<Address, UUID> {
 
     @Query("SELECT e FROM Address e LEFT JOIN e.client a WHERE a.id = :clientId")
-    public Address findAddressByClientId(@Param("clientId") UUID clientId);
+    Address findAddressByClientId(@Param("clientId") UUID clientId);
 
     @Transactional
     @Modifying
     @Query("UPDATE Address e SET e.state = :state, e.city = :city, e.street = :street, " +
             " e.number = :number WHERE e.id = :id")
-    public int updateAddress(@Param("id") UUID id,
+    void updateAddress(@Param("id") UUID id,
                              @Param("state") String state,
                              @Param("city") String city,
                              @Param("street") String street,
                              @Param("number") String number);
 
     @Query("SELECT e FROM Address e WHERE e.id = :id")
-    public Address findAddressById(@Param("id") UUID id);
+    Address findAddressById(@Param("id") UUID id);
 }
